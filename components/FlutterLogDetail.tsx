@@ -1228,7 +1228,7 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                                     <div className={`absolute inset-0 bg-gradient-to-br ${item.bg} opacity-0 group-hover:opacity-20 transition-opacity`}></div>
 
                                                     <div className={`p-4 rounded-2xl ${item.bg} ${item.color} mb-4 relative z-10 bg-opacity-20`}>
-                                                        {React.cloneElement(item.icon as React.ReactElement, { size: 32 })}
+                                                        {React.cloneElement(item.icon as React.ReactElement<any>, { size: 32 })}
                                                     </div>
 
                                                     <h4 className="text-white font-bold text-base mb-1 relative z-10">{item.name}</h4>
@@ -1277,7 +1277,7 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                     {/* Android Guide */}
                                     <div className="bg-[#151515] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center text-center group hover:border-rose-500/30 transition-colors">
                                         <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                            <Download width={32} height={32} />
+                                            <Download size={32} />
                                         </div>
                                         <h3 className="text-xl font-bold text-white mb-2">Android (Chrome)</h3>
                                         <p className="text-slate-400 text-sm mb-6 leading-relaxed">
