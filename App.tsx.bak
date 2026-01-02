@@ -1,0 +1,73 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+*/
+
+import React, { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { Hero } from './components/sections/Hero';
+import { About } from './components/sections/About';
+import { Process } from './components/sections/Process';
+import { Services } from './components/sections/Services';
+import { Portfolio } from './components/sections/Portfolio';
+import { Team } from './components/sections/Team';
+import { Contact } from './components/sections/Contact';
+import { Footer } from './components/sections/Footer';
+import { Navigation } from './components/sections/Navigation';
+import { ScrollToTop } from './components/ui/ScrollToTop';
+import { FlutterLogDetail } from './components/FlutterLogDetail';
+
+const App: React.FC = () => {
+    const [currentView, setCurrentView] = useState<'main' | 'flutterlog'>('main');
+
+    const handleOpenProject = (id: string) => {
+        if (id === 'flutterlog') {
+            setCurrentView('flutterlog');
+            // Reset scroll when opening detail view
+            window.scrollTo(0, 0);
+        }
+    };
+
+    const handleBackToMain = () => {
+        setCurrentView('main');
+        // Optional: Return to portfolio section position
+        setTimeout(() => {
+            const portfolioSection = document.getElementById('portfolio');
+            if (portfolioSection) {
+                portfolioSection.scrollIntoView({ behavior: 'auto' });
+            }
+        }, 100);
+    };
+
+    return (
+        <div className="min-h-screen bg-white selection:bg-blue-500 selection:text-white font-sans text-slate-900 overflow-x-hidden relative">
+
+            <AnimatePresence>
+                {currentView === 'flutterlog' && (
+                    <FlutterLogDetail onBack={handleBackToMain} />
+                )}
+            </AnimatePresence>
+
+            <div style={{ display: currentView === 'main' ? 'block' : 'none' }}>
+                {/* Global Grid Background */}
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_100%)] opacity-80"></div>
+                </div>
+
+                <Navigation />
+                <Hero />
+                <About />
+                <Process />
+                <Services />
+                <Portfolio onOpenProject={handleOpenProject} />
+                <Team />
+                <Contact />
+                <Footer />
+                <ScrollToTop />
+            </div>
+        </div>
+    );
+};
+
+export default App;
