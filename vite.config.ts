@@ -8,8 +8,8 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   build: {
-    minify: false,
+    outDir: 'dist',
     emptyOutDir: true,
-  },
-  logLevel: 'info'
+    sourcemap: false
+  }
 });
