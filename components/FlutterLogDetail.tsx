@@ -1277,7 +1277,7 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                     {/* Android Guide */}
                                     <div className="bg-[#151515] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center text-center group hover:border-rose-500/30 transition-colors">
                                         <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                            <Download size={32} />
+                                            <Download width={32} height={32} />
                                         </div>
                                         <h3 className="text-xl font-bold text-white mb-2">Android (Chrome)</h3>
                                         <p className="text-slate-400 text-sm mb-6 leading-relaxed">

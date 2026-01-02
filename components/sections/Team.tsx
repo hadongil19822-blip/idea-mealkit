@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Ticker from 'framer-motion-ticker';
+import { motion } from 'framer-motion';
 
 const TeamMemberCard: React.FC<{ member: any }> = ({ member }) => (
     <div className="flex-shrink-0 w-[300px] mx-4 bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100">
@@ -14,6 +14,28 @@ const TeamMemberCard: React.FC<{ member: any }> = ({ member }) => (
         </div>
     </div>
 );
+
+const CustomTicker = ({ children, duration = 40 }: { children: React.ReactNode, duration?: number }) => {
+    return (
+        <div className="flex overflow-hidden w-full relative">
+            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <motion.div
+                className="flex"
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{
+                    ease: "linear",
+                    duration: duration,
+                    repeat: Infinity,
+                }}
+                style={{ width: "fit-content", display: "flex" }}
+            >
+                <div className="flex">{children}</div>
+                <div className="flex">{children}</div>
+            </motion.div>
+        </div>
+    );
+};
 
 const TeamCarousel = () => {
     const teamMembers = [
@@ -31,11 +53,11 @@ const TeamCarousel = () => {
 
     return (
         <div className="h-[350px]">
-            <Ticker duration={40}>
+            <CustomTicker duration={60}>
                 {teamMembers.map((member, index) => (
                     <TeamMemberCard key={index} member={member} />
                 ))}
-            </Ticker>
+            </CustomTicker>
         </div>
     );
 };
