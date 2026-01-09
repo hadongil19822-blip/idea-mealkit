@@ -6,11 +6,29 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, MessageCircle, Heart, Globe, Bell, ShoppingBag, Brain, Zap, Clock, Users, Activity, X, ChevronLeft, ChevronRight, Lock, MapPin, Search, Smartphone, Share, Share2, MoreVertical, PlusSquare, Download, Shield, Star, Smile, Coffee, Crown, Mail, Gift, User, Ghost, Signal, Wifi, Battery, Home, BookLock, Unlock } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Heart, Globe, Bell, ShoppingBag, Brain, Zap, Clock, Users, Activity, X, ChevronLeft, ChevronRight, Lock, MapPin, Search, Smartphone, Share, Share2, MoreVertical, PlusSquare, Download, Shield, Star, Smile, Coffee, Crown, Mail, Gift, User, Ghost, Signal, Wifi, Battery, Home, BookLock, Unlock, Play } from 'lucide-react';
 import { characterData } from './data/characters';
 
 // New Logo URL (Bright Pink F)
 const logoImg = "https://firebasestorage.googleapis.com/v0/b/studio-6323553811-9cc93.firebasestorage.app/o/FCMImages%2F1024-1024.png?alt=media&token=fdfb49fb-1423-4b77-8e97-e5cc75048ba8";
+const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.flutterlog.twa&pcampaignid=web_share";
+
+// Custom Google Play Store Icon (SVG)
+const PlayStoreIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+    <svg 
+        width={size} 
+        height={size} 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+    >
+        <path d="M3.60938 2.0625C3.41406 2.25781 3.28125 2.55859 3.28125 2.94922V21.0508C3.28125 21.4414 3.41406 21.7422 3.60938 21.9375L3.67188 22L13.125 12.5469V12.4531L3.67188 3L3.60938 3.0625V2.0625Z" fill="currentColor" opacity="0.9"/>
+        <path d="M16.2656 15.6875L13.125 12.5469V12.4531L16.2656 9.3125L16.3281 9.35938L20.0469 11.4688C21.1094 12.0625 21.1094 13.0469 20.0469 13.6562L16.3281 15.7656L16.2656 15.6875Z" fill="currentColor" opacity="1"/>
+        <path d="M16.3281 15.7656L13.125 12.5469L3.60938 22.0625C3.9375 22.4062 4.48438 22.4531 5.125 22.0938L16.3281 15.7656Z" fill="currentColor" opacity="0.8"/>
+        <path d="M16.3281 9.35938L5.125 2.01562C4.48438 1.65625 3.9375 1.70312 3.60938 2.04688L13.125 11.5625L16.3281 9.35938Z" fill="currentColor" opacity="0.7"/>
+    </svg>
+);
 
 // --- Sub-components ---
 
@@ -778,17 +796,25 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                         40인의 거대한 세계관,<br />
                                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-600">그 중심에 당신이 있습니다.</span>
                                     </h1>
-                                    <div className="flex gap-4 justify-center lg:justify-start">
-                                        <button onClick={onBack} className="px-8 py-3.5 rounded-full bg-white text-black font-bold hover:bg-zinc-200 transition-colors shadow-lg flex items-center gap-2">
+                                    <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                                        <button onClick={onBack} className="px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-md text-white font-bold hover:bg-white/20 transition-colors border border-white/10 flex items-center gap-2">
                                             <ArrowLeft size={18} /> 이전으로
                                         </button>
                                         <a
                                             href="https://flutterlog.com"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="px-8 py-3.5 rounded-full bg-rose-600 text-white font-bold hover:bg-rose-500 transition-all shadow-lg shadow-rose-900/50 flex items-center gap-2"
+                                            className="px-6 py-3.5 rounded-full bg-white text-black font-bold hover:bg-zinc-200 transition-all shadow-lg flex items-center gap-2"
                                         >
-                                            <Globe size={18} /> 사이트 방문하기
+                                            <Globe size={18} /> 웹 서비스 방문
+                                        </a>
+                                        <a
+                                            href={GOOGLE_PLAY_URL}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-6 py-3.5 rounded-full bg-rose-600 text-white font-bold hover:bg-rose-500 transition-all shadow-lg shadow-rose-900/50 flex items-center gap-2"
+                                        >
+                                            <PlayStoreIcon size={18} className="text-white" /> Google Play
                                         </a>
                                     </div>
                                 </div>
@@ -1105,7 +1131,7 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                         <motion.div
                                             className="space-y-6"
                                             initial={{ opacity: 0, x: 30 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
+                                            whileInView={{ opacity: 1, scale: 1 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.8 }}
                                         >
@@ -1223,16 +1249,16 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                                 <motion.div
                                                     key={idx}
                                                     whileHover={{ y: -5, scale: 1.05 }}
-                                                    className={`bg-[#151515] p-6 rounded-3xl border border-white/5 relative group overflow-hidden hover:border-opacity-50 transition-all aspect-square flex flex-col items-center justify-center ${item.border.replace('/20', '/50')}`}
+                                                    className={`bg-[#151515] p-5 rounded-3xl border border-white/5 relative group overflow-hidden hover:border-opacity-50 transition-all flex flex-col items-center justify-center ${item.border.replace('/20', '/50')}`}
                                                 >
                                                     <div className={`absolute inset-0 bg-gradient-to-br ${item.bg} opacity-0 group-hover:opacity-20 transition-opacity`}></div>
 
-                                                    <div className={`p-4 rounded-2xl ${item.bg} ${item.color} mb-4 relative z-10 bg-opacity-20`}>
-                                                        {React.cloneElement(item.icon as React.ReactElement<any>, { size: 32 })}
+                                                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl ${item.bg} ${item.color} mb-3 flex items-center justify-center relative z-10 bg-opacity-20`}>
+                                                        {React.cloneElement(item.icon as React.ReactElement<any>, { size: 24 })}
                                                     </div>
 
-                                                    <h4 className="text-white font-bold text-base mb-1 relative z-10">{item.name}</h4>
-                                                    <p className={`text-xs font-bold ${item.color} relative z-10`}>{item.stat}</p>
+                                                    <h4 className="text-white font-bold text-sm md:text-base mb-1 relative z-10 text-center">{item.name}</h4>
+                                                    <p className={`text-[10px] md:text-xs font-bold ${item.color} relative z-10`}>{item.stat}</p>
                                                 </motion.div>
                                             ))}
                                         </div>
@@ -1254,7 +1280,7 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                     </h2>
                                     <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
                                         FlutterLog는 설치가 필요 없는 차세대 웹앱(PWA)입니다.<br />
-                                        홈 화면에 추가하면 전체 화면으로 더 몰입감 있게 즐길 수 있습니다.
+                                        홈 화면에 추가하거나 스토어에서 공식 앱을 다운로드하여 즐길 수 있습니다.
                                     </p>
                                 </div>
 
@@ -1277,13 +1303,33 @@ export const FlutterLogDetail: React.FC<{ onBack: () => void }> = ({ onBack }) =
                                     {/* Android Guide */}
                                     <div className="bg-[#151515] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center text-center group hover:border-rose-500/30 transition-colors">
                                         <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                            <Download size={32} />
+                                            <PlayStoreIcon size={32} className="text-white" />
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-2">Android (Chrome)</h3>
-                                        <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                                            우측 상단의 <span className="text-white font-bold inline-flex items-center gap-1 mx-1"><MoreVertical size={12} /> 더보기</span> 버튼을 누르고<br />
-                                            메뉴에서 <span className="text-white font-bold inline-flex items-center gap-1 mx-1"><Download size={12} /> 홈 화면에 추가</span>를 선택하세요.
-                                        </p>
+                                        <h3 className="text-xl font-bold text-white mb-2">Android (Google Play)</h3>
+                                        
+                                        <div className="mb-6 w-full space-y-4">
+                                            <a 
+                                                href={GOOGLE_PLAY_URL} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-rose-900/40"
+                                            >
+                                                <PlayStoreIcon size={20} className="text-white" />
+                                                Google Play에서 다운로드
+                                            </a>
+                                            
+                                            <div className="relative flex items-center py-2">
+                                                <div className="flex-grow border-t border-white/5"></div>
+                                                <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest">OR PWA INSTALL</span>
+                                                <div className="flex-grow border-t border-white/5"></div>
+                                            </div>
+
+                                            <p className="text-slate-400 text-[13px] leading-relaxed">
+                                                크롬 브라우저 우측 상단의 <span className="text-white font-bold inline-flex items-center gap-1 mx-1"><MoreVertical size={12} /> 더보기</span> 버튼을 누르고<br />
+                                                메뉴에서 <span className="text-white font-bold inline-flex items-center gap-1 mx-1"><Download size={12} /> 홈 화면에 추가</span>를 선택하세요.
+                                            </p>
+                                        </div>
+
                                         <span className="text-[10px] font-mono text-rose-400 bg-rose-900/20 px-3 py-1 rounded-full">
                                             Tip: 설치 후 앱 서랍에서도 확인 가능합니다.
                                         </span>

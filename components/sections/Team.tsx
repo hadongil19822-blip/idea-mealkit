@@ -1,4 +1,9 @@
 
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+*/
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -15,7 +20,8 @@ const TeamMemberCard: React.FC<{ member: any }> = ({ member }) => (
     </div>
 );
 
-const CustomTicker = ({ children, duration = 40 }: { children: React.ReactNode, duration?: number }) => {
+// Fix: Made children optional in the props type to resolve TS error when children are passed via JSX.
+const CustomTicker = ({ children, duration = 40 }: { children?: React.ReactNode, duration?: number }) => {
     return (
         <div className="flex overflow-hidden w-full relative">
             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
