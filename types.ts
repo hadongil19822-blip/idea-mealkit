@@ -4,7 +4,6 @@
 */
 
 import 'react';
-import * as THREE from 'three';
 
 declare global {
   namespace JSX {
