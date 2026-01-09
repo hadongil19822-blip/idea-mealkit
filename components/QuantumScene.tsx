@@ -10,34 +10,6 @@ import { Float, Environment, PointMaterial, Text3D, Sparkles, Cylinder, Sphere, 
 import * as THREE from 'three';
 import '../types';
 
-// Fix: Add local JSX intrinsic elements augmentation to ensure Three.js elements are recognized.
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      mesh: any;
-      group: any;
-      meshStandardMaterial: any;
-      meshPhysicalMaterial: any;
-      meshBasicMaterial: any;
-      pointLight: any;
-      spotLight: any;
-      ambientLight: any;
-      sphereGeometry: any;
-      boxGeometry: any;
-      planeGeometry: any;
-      cylinderGeometry: any;
-      bufferGeometry: any;
-      bufferAttribute: any;
-      points: any;
-      fog: any;
-      color: any;
-      primitive: any;
-      directionalLight: any;
-      [elemName: string]: any;
-    }
-  }
-}
-
 // --- VISUAL OS STYLE GLASS MATERIAL ---
 const VisionGlass = ({ color = '#ffffff', opacity = 0.6, ...props }: any) => (
   <meshPhysicalMaterial
