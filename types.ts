@@ -4,8 +4,8 @@
 */
 
 import 'react';
+import * as THREE from 'three';
 
-// Augment the global JSX namespace for Three.js elements
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -28,6 +28,7 @@ declare global {
       color: any;
       primitive: any;
       directionalLight: any;
+      torusGeometry: any;
       [elemName: string]: any;
     }
   }
