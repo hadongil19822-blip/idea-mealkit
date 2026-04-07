@@ -1,37 +1,30 @@
 import React from 'react';
-import { Code2 } from 'lucide-react';
-import { IdeaOrbScene } from '../QuantumScene';
+import { Code2, Zap, Layers, Cpu, Database } from 'lucide-react';
 import { IngredientsList } from '../Diagrams';
 
 export const About = () => {
     return (
         <section id="about" className="py-32 relative z-10">
             <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    <div className="relative w-full aspect-square bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 group ring-1 ring-slate-100">
-                        <IdeaOrbScene />
-                        {/* Tech Overlay for 3D Scene */}
-                        <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-slate-200 flex justify-between items-center shadow-lg">
-                            <div className="flex gap-3 items-center">
-                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                <span className="text-xs font-mono font-bold text-slate-600">RENDER_ENGINE: ACTIVE</span>
-                            </div>
-                            <Code2 size={16} className="text-slate-400" />
-                        </div>
+                <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-12 h-[1px] bg-indigo-500/50"></div>
+                        <span className="text-indigo-400 font-bold tracking-[0.3em] text-xs uppercase drop-shadow-md">Professional Tech Stack</span>
+                        <div className="w-12 h-[1px] bg-indigo-500/50"></div>
                     </div>
-                    <div>
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-[1px] bg-blue-600"></div>
-                            <span className="text-blue-600 font-bold tracking-widest text-xs uppercase">Core Ingredients</span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight tracking-tight">
-                            공간을 채우는 <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">완벽한 기술력.</span>
-                        </h2>
-                        <p className="text-lg text-slate-500 leading-relaxed mb-10 font-medium border-l-4 border-slate-100 pl-6">
-                            아이디어 밀키트는 0과 1 사이의 깊은 질감을 현실로 구현합니다. <br />
-                            최적의 성능을 위한 Engineering Stack을 확인하세요.
-                        </p>
+                    
+                    <h2 className="text-[1.6rem] sm:text-4xl md:text-6xl font-black text-white mb-8 leading-[1.3] tracking-tight drop-shadow-lg px-2 break-keep">
+                        탄탄한 기술력을 바탕으로 <br className="hidden sm:block" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 sm:ml-2">최상의 퍼포먼스.</span>
+                    </h2>
+                    
+                    <p className="text-sm sm:text-lg md:text-xl text-slate-400 leading-relaxed mb-16 font-medium max-w-2xl px-4 break-keep">
+                        아이디어 밀키트는 겉으로 보이는 화려함에만 집중하지 않습니다. <br className="hidden md:block" />
+                        내부 구조부터 단단하게 설계된 최신 기술 스택들이 사용자에게는 <br className="hidden md:block" />
+                        가장 쉽고 직관적인 디지털 경험으로 다가갈 수 있도록 세밀하게 구성합니다.
+                    </p>
+                    
+                    <div className="w-full text-left">
                         <IngredientsList />
                     </div>
                 </div>

@@ -8,14 +8,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const TeamMemberCard: React.FC<{ member: any }> = ({ member }) => (
-    <div className="flex-shrink-0 w-[300px] mx-4 bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100">
-        <div className="h-40 bg-slate-200">
-            <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
+    <div className="flex-shrink-0 w-[300px] mx-4 bg-slate-900/40 rounded-2xl shadow-xl overflow-hidden border border-slate-700/50 backdrop-blur-md group hover:border-indigo-500/50 transition-colors cursor-pointer">
+        <div className="h-40 bg-slate-800 relative overflow-hidden">
+            <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
         </div>
-        <div className="p-6">
-            <h3 className="font-bold text-xl mb-1">{member.name}</h3>
-            <p className="text-blue-500 font-semibold text-sm mb-3">{member.role}</p>
-            <p className="text-slate-500 text-xs leading-relaxed">{member.bio}</p>
+        <div className="p-6 relative z-10">
+            <h3 className="font-bold text-xl mb-1 text-slate-100 group-hover:text-indigo-300 transition-colors">{member.name}</h3>
+            <p className="text-blue-500 font-bold tracking-widest text-xs mb-3 uppercase">{member.role}</p>
+            <p className="text-slate-400 text-xs leading-relaxed font-medium">{member.bio}</p>
         </div>
     </div>
 );
@@ -24,8 +25,8 @@ const TeamMemberCard: React.FC<{ member: any }> = ({ member }) => (
 const CustomTicker = ({ children, duration = 40 }: { children?: React.ReactNode, duration?: number }) => {
     return (
         <div className="flex overflow-hidden w-full relative">
-            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10"></div>
+            <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10"></div>
             <motion.div
                 className="flex"
                 animate={{ x: ["0%", "-50%"] }}
@@ -70,12 +71,12 @@ const TeamCarousel = () => {
 
 export const Team = () => {
     return (
-        <section id="team" className="py-32 relative z-10 bg-white">
+        <section id="team" className="py-32 relative z-10 bg-transparent border-t border-slate-800/50">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <span className="px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-blue-600 text-xs font-bold tracking-widest uppercase mb-4 inline-block shadow-sm">Our Chefs</span>
-                    <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">Meet the Team</h2>
-                    <p className="text-slate-400 text-lg font-medium">디지털 요리를 만드는 전문가들</p>
+                    <span className="px-4 py-1.5 rounded-full bg-indigo-950/50 border border-indigo-800/50 text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4 inline-block shadow-[0_0_15px_rgba(99,102,241,0.3)]">Our Chefs</span>
+                    <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-lg">Meet the Team</h2>
+                    <p className="text-slate-400 text-lg font-medium">디지털 웹을 창조하는 마에스트로들</p>
                 </div>
             </div>
             <TeamCarousel />

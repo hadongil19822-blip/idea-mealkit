@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smartphone, Cpu, Palette, Globe, Layers, Database, X, ArrowRight, Activity, Terminal, Code, Sparkles, BarChart3, Settings2, Box, ClipboardList, PenTool, Server, Rocket, Music, TrendingUp, Play, Pause, SkipForward, Disc, Waves, Calendar, Heart, User, Search, Menu, Home, Signal, Wifi, Battery, ScrollText, BookOpen, CloudMoon, Snowflake, Diamond, PawPrint, HeartHandshake, UserPlus, UserMinus, Star, MessageCircle } from 'lucide-react';
+import { Smartphone, Cpu, Palette, Globe, Layers, Database, X, ArrowRight, Activity, Terminal, Code, Sparkles, BarChart3, Settings2, Box, ClipboardList, PenTool, Server, Rocket, Music, TrendingUp, Play, Pause, SkipForward, Disc, Waves, Calendar, Heart, User, Search, Menu, Home, Signal, Wifi, Battery, ScrollText, BookOpen, CloudMoon, Snowflake, Diamond, PawPrint, HeartHandshake, UserPlus, UserMinus, Star, MessageCircle, Map, ExternalLink, Shirt, Sprout, Flag, GraduationCap } from 'lucide-react';
+import { FcCamera, FcReadingEbook, FcLandscape, FcSportsMode, FcGraduationCap as FcCap } from 'react-icons/fc';
 
 const FLUTTERLOG_ICON_URL = "https://firebasestorage.googleapis.com/v0/b/studio-6323553811-9cc93.firebasestorage.app/o/FCMImages%2F1024-1024.png?alt=media&token=fdfb49fb-1423-4b77-8e97-e5cc75048ba8";
 
@@ -14,32 +15,32 @@ const FLUTTERLOG_ICON_URL = "https://firebasestorage.googleapis.com/v0/b/studio-
 export const ServiceList: React.FC = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {[
-        { id: '01', title: 'Web Platform', sub: 'React / Next.js', desc: '고해상도 사용자 경험을 제공하는 모던 웹.', icon: Globe },
-        { id: '02', title: 'Mobile App', sub: 'Flutter / Native', desc: '강력한 퍼포먼스의 크로스 플랫폼 솔루션.', icon: Smartphone },
-        { id: '03', title: 'AI Integration', sub: 'LLM / Vector DB', desc: '비즈니스 로직에 지능을 더하는 AI 엔진.', icon: Cpu },
-        { id: '04', title: 'UI/UX Design', sub: 'Figma / System', desc: '사용자 중심의 직관적이고 아름다운 설계.', icon: Palette },
+        { id: '01', title: '합리적인 견적', sub: 'Cost-Effective', desc: '거품을 뺀 정직한 단가 설계로 비용 부담은 낮추고, 퀄리티는 극대화합니다.', icon: Diamond },
+        { id: '02', title: '최신 AI 기술 접목', sub: 'AI Integration', desc: '기존 서비스에 최신 생성형 AI 모델과 기술을 융합해 혁신적인 가치를 만듭니다.', icon: Cpu },
+        { id: '03', title: '압도적인 속도', sub: 'Agile Delivery', desc: '독창적인 개발 프레임워크와 모듈화를 통해 생각했던 아이디어를 누구보다 빠르게 런칭합니다.', icon: Rocket },
+        { id: '04', title: '든든한 파트너십', sub: 'Team Collaboration', desc: '단순한 외주를 넘어, 마치 내부 팀원처럼 함께 고민하며 유연하게 협업합니다.', icon: HeartHandshake },
       ].map((service) => (
         <motion.div 
           key={service.id} 
           whileHover={{ y: -5 }}
-          className="p-8 rounded-[2rem] bg-white border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-xl transition-all cursor-pointer group flex flex-col h-full relative overflow-hidden"
+          className="p-8 rounded-[2rem] bg-slate-900/40 border border-slate-700/50 hover:border-indigo-500/50 shadow-lg hover:shadow-[0_0_30px_rgba(99,102,241,0.2)] transition-all cursor-pointer group flex flex-col h-full relative overflow-hidden backdrop-blur-sm"
         >
-            <div className="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl text-slate-300 font-sans tracking-tighter select-none -translate-y-2 translate-x-2">
+            <div className="absolute top-0 right-0 p-4 opacity-[0.03] font-black text-6xl text-white font-sans tracking-tighter select-none -translate-y-2 translate-x-2">
                 {service.id}
             </div>
             
-            <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 mb-6 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300 shadow-inner">
+            <div className="w-14 h-14 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-all duration-300 shadow-inner">
                 <service.icon size={26} strokeWidth={1.5} />
             </div>
             
             <div className="mt-auto">
-                <h3 className="text-xl font-bold text-slate-900">{service.title}</h3>
-                <span className="text-xs font-mono text-blue-600 mb-2 block">{service.sub}</span>
-                <p className="text-slate-500 text-sm leading-relaxed font-medium">{service.desc}</p>
+                <h3 className="text-xl font-bold text-slate-100">{service.title}</h3>
+                <span className="text-xs font-mono text-indigo-400 mb-2 block">{service.sub}</span>
+                <p className="text-slate-400 text-sm leading-relaxed font-medium">{service.desc}</p>
             </div>
             
             {/* Hover Tech Line */}
-            <div className="absolute bottom-0 left-0 h-1 bg-blue-600 w-0 group-hover:w-full transition-all duration-500"></div>
+            <div className="absolute bottom-0 left-0 h-1 bg-indigo-500 w-0 group-hover:w-full transition-all duration-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]"></div>
         </motion.div>
       ))}
     </div>
@@ -52,18 +53,18 @@ export const IngredientsList: React.FC = () => (
             { icon: Code, title: "Web Architecture", desc: "React + TypeScript", tag: "Frontend" },
             { icon: Box, title: "App Solution", desc: "Flutter + Dart", tag: "Mobile" },
             { icon: Database, title: "Data Storage", desc: "Supabase / PostgreSQL", tag: "Backend" },
-            { icon: Terminal, title: "Intelligence", desc: "Gemini 2.5 Flash", tag: "AI Model" }
+            { icon: Terminal, title: "Intelligence", desc: "Gemini / OpenAI / Grok", tag: "AI Model" }
         ].map((it, idx) => (
-            <div key={idx} className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-blue-200 hover:shadow-md transition-all group">
-                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-600 group-hover:text-blue-600 transition-colors shrink-0">
+            <div key={idx} className="flex items-start gap-4 p-5 bg-slate-900/40 rounded-2xl border border-slate-700/50 shadow-lg hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all group backdrop-blur-sm">
+                <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-400 border border-slate-700 transition-colors shrink-0">
                     <it.icon size={20} />
                 </div>
                 <div>
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full uppercase tracking-wide">{it.tag}</span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-950/50 text-blue-300 border border-blue-900/50 rounded-full uppercase tracking-wide">{it.tag}</span>
                     </div>
-                    <h4 className="font-bold text-slate-900 text-sm">{it.title}</h4>
-                    <p className="text-xs text-slate-500 font-mono mt-1">{it.desc}</p>
+                    <h4 className="font-bold text-slate-200 text-sm">{it.title}</h4>
+                    <p className="text-xs text-slate-400 font-mono mt-1">{it.desc}</p>
                 </div>
             </div>
         ))}
@@ -82,7 +83,7 @@ export const WorkProcess: React.FC = () => {
     return (
         <div className="relative">
             {/* Connecting Line (Desktop) */}
-            <div className="hidden lg:block absolute top-12 left-0 right-0 h-0.5 bg-slate-200 -z-10"></div>
+            <div className="hidden lg:block absolute top-12 left-0 right-0 h-0.5 bg-slate-800 -z-10"></div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {steps.map((step, idx) => (
@@ -91,22 +92,22 @@ export const WorkProcess: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.1 }}
-                        className="relative bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg group hover:-translate-y-2 transition-transform duration-300"
+                        className="relative bg-slate-900/60 p-6 rounded-[2rem] border border-slate-700/50 shadow-xl group hover:-translate-y-2 transition-transform duration-300 backdrop-blur-md hover:border-indigo-500/30"
                     >
                         {/* Step Number Badge */}
-                        <div className="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-md border-4 border-slate-50">
+                        <div className="absolute -top-4 -right-4 w-10 h-10 bg-slate-950 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-[0_0_15px_rgba(255,255,255,0.1)] border border-slate-700 group-hover:border-indigo-500 transition-colors">
                             {step.id}
                         </div>
 
-                        <div className={`w-14 h-14 ${step.bg} rounded-2xl flex items-center justify-center ${step.color} mb-5 shadow-inner`}>
+                        <div className={`w-14 h-14 bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center ${step.color} mb-5 shadow-inner group-hover:bg-slate-700 transition-colors`}>
                             <step.icon size={24} />
                         </div>
                         
                         <div className="mb-2">
-                             <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">{step.sub}</span>
-                             <h3 className="text-lg font-black text-slate-900">{step.title}</h3>
+                             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block mb-1 group-hover:text-indigo-400 transition-colors">{step.sub}</span>
+                             <h3 className="text-lg font-black text-slate-100">{step.title}</h3>
                         </div>
-                        <p className="text-slate-500 text-sm font-medium">{step.desc}</p>
+                        <p className="text-slate-400 text-sm font-medium">{step.desc}</p>
                     </motion.div>
                 ))}
             </div>
@@ -383,6 +384,7 @@ interface Project {
     category: string;
     tag: string;
     desc: string;
+    url?: string;
     icon?: string;
     lucideIcon?: any;
     bgColor: string;
@@ -398,69 +400,108 @@ interface Project {
         plugins: string;
     }
     statsComponent?: React.ReactNode;
+    deviceMode?: 'desktop' | 'mobile';
+    iframeScale?: number;
+    iconColor?: string;
 }
 
 const projects: Project[] = [
     {
         id: 'flutterlog',
         title: 'FlutterLog',
-        category: 'Case Study',
-        tag: 'BUILD_2025',
-        desc: '40명의 AI 페르소나와 함께하는 리얼타임 채팅형 연애 시뮬레이션 게임.',
+        category: 'Simulation',
+        tag: 'AI_CHAT',
+        desc: '사용자의 선택에 따라 전개가 달라지는 리얼타임 AI 연애 시뮬레이션 플랫폼. 자연스러운 대화형 LLM 엔진을 통해 몰입감 깊은 인터랙티브 스토리텔링을 제공합니다.',
+        url: 'https://flutterlog.com',
         icon: FLUTTERLOG_ICON_URL,
-        bgColor: 'bg-slate-900',
-        detailTitle: 'FlutterLog',
-        detailSub: 'PROJECT_DETAIL_VIEW',
-        techDesc: '사용자 경험을 극대화하기 위해 리액트와 플러터 하이브리드 아키텍처를 채택했습니다. 특히 LLM 응답 속도를 최적화하기 위해 자체적인 캐싱 레이어와 스트리밍 처리를 구현했습니다.',
-        features: ['Real-time Emotion Analysis', 'Vector Database Memory', 'Dynamic Persona Generation', 'Cross-Platform Sync'],
-        configSnippet: {
-            var: 'engineConfig',
-            model: 'gemini-pro',
-            temp: '0.8',
-            ctx: '32000',
-            plugins: '["emotion", "memory"]'
-        },
-        statsComponent: <CoreEmotionStatsGrid />
+        bgColor: 'bg-rose-900',
+        detailTitle: 'FlutterLog Interactive',
+        detailSub: 'REAL-TIME AI SIMULATION',
+        techDesc: '초거대 언어 모델(LLM)을 활용하여 캐릭터의 페르소나를 극도로 자연스럽게 구현했습니다. 리액트와 플러터 하이브리드 설계로 제작되었습니다.',
+        features: ['Multi-branch Storytelling', 'Real-time GPT-based AI Chat', 'Dynamic Emotion & Affinity System', 'Smooth Cross-platform UI', 'User State Persistence'],
+        configSnippet: { var: 'flutterlog', model: 'gpt-4o', temp: '0.8', ctx: '16000', plugins: '["emotion_analyzer"]' },
+        statsComponent: <CoreEmotionStatsGrid />,
+        deviceMode: 'mobile'
     },
     {
-        id: 'mirai',
-        title: 'MIRAI',
-        category: 'Lifestyle',
-        tag: 'AI_FORTUNE',
-        desc: '전통 명리학 데이터를 AI로 재해석하여 개인화된 일일 운세와 조언을 제공하는 서비스.',
-        lucideIcon: Layers,
-        bgColor: 'bg-[#F0F7FF]', 
-        detailTitle: 'MIRAI Fortune',
-        detailSub: 'AI_ASTROLOGY',
-        techDesc: '만세력 데이터베이스와 LLM을 결합하여, 단순한 텍스트 출력을 넘어 사용자의 고민에 공감하고 구체적인 조언을 제시하는 AI 상담사를 구현했습니다.',
-        features: ['정통 명리학 알고리즘 적용', 'LLM 기반 심층 운세 해석', '일일 바이오리듬 & 행운 분석', '개인 맞춤형 AI 조언 제공'],
-        configSnippet: {
-            var: 'fortuneModel',
-            model: 'mystic-7b',
-            temp: '0.7',
-            ctx: '8192',
-            plugins: '["saju_db", "tarot"]'
-        }
+        id: 'metalook',
+        title: 'MetaLook',
+        category: 'Fashion AI',
+        tag: 'GENERATIVE',
+        desc: '시공간 제약 없이 브랜드 세계관을 완벽히 시각화하는 가상 모델 피팅 솔루션. 생성형 AI 기술을 통해 가장 현실적인 룩북을 자동 생성합니다.',
+        url: 'https://metalook.store',
+        lucideIcon: FcCamera,
+        bgColor: 'bg-indigo-900', 
+        detailTitle: 'MetaLook Studio',
+        detailSub: 'AI VIRTUAL MODEL PLATFORM',
+        techDesc: '최신 AI 기술 파이프라인을 구축하여, 의류 텍스처와 인체 비율을 극도로 사실적으로 세분화하여 렌더링합니다.',
+        features: ['Generative AI Virtual Try-On', 'Automated Lookbook Synthesis', 'Brand Concept Customization', 'High-res Texture Restoration'],
+        configSnippet: { var: 'metaVision', model: 'stable-diffusion-xl', temp: '0.6', ctx: '2048', plugins: '["controlnet", "fashion"]' },
+        iframeScale: 0.5
     },
     {
-        id: 'deepdive',
-        title: 'DeepDive',
-        category: 'EdTech',
-        tag: 'UNDERWATER_LMS',
-        desc: '스쿠버 다이빙 자격증 교육부터 로그북 관리까지, 다이버를 위한 올인원 플랫폼.',
-        lucideIcon: Waves,
-        bgColor: 'bg-sky-900',
-        detailTitle: 'DeepDive Edu',
-        detailSub: 'MARINE_PLATFORM',
-        techDesc: '오프라인 환경에서도 작동하는 로그북 기능과 다이빙 포인트 GPS 매핑 기술을 적용했습니다. 동영상 강의 스트리밍 최적화를 통해 해양 환경에서도 끊김 없는 학습을 지원합니다.',
-        features: ['Offline Logbook Sync', 'PADI/SSI Course Integration', 'Dive Site GPS Map', 'Community Feed'],
-        configSnippet: {
-            var: 'diveComputer',
-            model: 'marine-ops-v1',
-            temp: '0.2',
-            ctx: '12000',
-            plugins: '["gps", "offline_sync"]'
-        }
+        id: 'onlystar',
+        title: 'OnlyStar',
+        category: 'Game',
+        tag: 'NOVEL_CHAT',
+        desc: '웹소설의 주인공이 되어 세계관 내 캐릭터들과 직접 소통하는 체험형 인터랙티브 AI 소설 플랫폼. 새로운 형태의 재미를 설계합니다.',
+        url: 'https://onlystar-web.web.app',
+        lucideIcon: FcReadingEbook,
+        bgColor: 'bg-purple-900',
+        detailTitle: 'OnlyStar Novel App',
+        detailSub: 'INTERACTIVE FICTION',
+        techDesc: '기존의 단방향 웹소설 소비 방식을 탈피하여, 유저의 채팅과 행동이 작품 진행에 직접적인 영향을 미치도록 시나리오 다이내믹 브랜칭(Dynamic Branching) AI 엔진을 도입했습니다.',
+        features: ['Context-Aware Persona AI', 'Interactive Novel Reader', 'Scenario Dynamic Branching', 'Character Memory System'],
+        configSnippet: { var: 'novelEngine', model: 'claude-3-haiku', temp: '0.7', ctx: '32000', plugins: '["story_branching"]' },
+        iframeScale: 0.5
+    },
+    {
+        id: 'afarm',
+        title: 'AFarm',
+        category: 'Social Game',
+        tag: 'WEB3_FARM',
+        desc: '유저간의 상호작용과 작물 재배 메커니즘을 결합한 멀티플레이어 소셜 게임. PWA 아키텍처로 모바일 친화적으로 제공됩니다.',
+        url: 'https://afarm-a283b.web.app',
+        lucideIcon: FcLandscape,
+        bgColor: 'bg-green-900',
+        detailTitle: 'AFarm Social Game',
+        detailSub: 'WEB-BASED MULTIPLAYER',
+        techDesc: '웹 환경에서도 네이티브 수준의 부드러움을 유지하기 위해 최적화된 상태 동기화 웹소켓(WebSocket) 단방향 통신과 PWA 기반 로컬 캐싱 기술을 적용했습니다.',
+        features: ['Real-time Multiplayer Sync', 'Progressive Web App (PWA)', 'Virtual Economy Engine', 'Interactive Elements'],
+        configSnippet: { var: 'gameServer', model: 'multiplayer-sync', temp: '0.0', ctx: '0', plugins: '["websocket", "state_sync"]' },
+        deviceMode: 'mobile'
+    },
+    {
+        id: 'golfcaddy',
+        title: 'Golf Caddy',
+        category: 'Sports',
+        tag: 'AI_CADDY',
+        desc: '필드 데이터와 유저의 플레이 기록을 바탕으로 최적 클럽과 전략을 제시하는 초개인화 AI 골프 비서 플랫폼입니다.',
+        url: 'https://golf-6ac26.web.app',
+        lucideIcon: FcSportsMode,
+        bgColor: 'bg-emerald-900',
+        detailTitle: 'Personal Golf Caddy',
+        detailSub: 'SMART SPORTS ASSISTANT',
+        techDesc: 'GPS 기반 지형 데이터와 실시간 기상 데이터 API를 융합했습니다. 사용자의 과거 스윙 이력을 머신러닝 알고리즘으로 분석하여 각 홀마다 공략법을 제안합니다.',
+        features: ['GPS Course Mapping', 'Dynamic Weather Integration', 'AI Club Recommendation', 'User Analytics Dashboard'],
+        configSnippet: { var: 'caddyBrain', model: 'sports-analyzer-v1', temp: '0.3', ctx: '8000', plugins: '["gps", "weather"]' },
+        deviceMode: 'mobile'
+    },
+    {
+        id: 'hangulwave',
+        title: 'HangulWave',
+        category: 'Education',
+        tag: 'KOREAN_LMS',
+        desc: '글로벌 유저를 위한 스마트 한국어 학습 플랫폼. 다양한 게이미피케이션 요소와 음성인식을 결합해 개인화된 에듀테크 환경을 제공합니다.',
+        url: 'https://fluted-lambda-470312-v4.web.app',
+        lucideIcon: FcCap,
+        bgColor: 'bg-blue-900',
+        detailTitle: 'HangulWave Platform',
+        detailSub: 'EDUTECH LMS SOLUTION',
+        techDesc: '외국인 학습자를 위해 음성 인식(STT) 기반의 발음 평가 시스템과 AI 한국어 튜터 기능을 연동하였습니다. 실시간 DB를 통해 학습 진척도를 관리합니다.',
+        features: ['Interactive Speech Recognition', 'Gamified Learning Modules', 'Real-time Grading System', 'Cloud Content Sync'],
+        configSnippet: { var: 'eduEngine', model: 'tutor-llm-v4', temp: '0.4', ctx: '12000', plugins: '["stt", "tts"]' },
+        deviceMode: 'mobile'
     }
 ]
 
@@ -468,64 +509,62 @@ interface PortfolioGridProps {
     onOpenProject?: (id: string) => void;
 }
 
+const CardBanner: React.FC<{ project: Project }> = ({ project }) => {
+    const Icon = project.lucideIcon || Layers;
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden bg-[#0A0A0A]">
+            <div className="absolute inset-0 flex flex-col items-center justify-center select-none pointer-events-none opacity-[0.04]">
+                <span className="text-[80px] md:text-[90px] font-black text-white uppercase leading-[0.85] tracking-tighter w-full text-center whitespace-nowrap overflow-hidden">{project.title}</span>
+                <span className="text-[80px] md:text-[90px] font-black text-white uppercase leading-[0.85] tracking-tighter w-full text-center whitespace-nowrap overflow-hidden">INTERACTIVE</span>
+            </div>
+            
+            <div className="relative z-10 w-28 h-28 bg-white rounded-[2rem] flex items-center justify-center group-hover:scale-105 transition-transform duration-500 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+                {project.icon ? (
+                    <img src={project.icon} alt={project.title} className="w-[65%] h-[65%] object-contain rounded-2xl" />
+                ) : (
+                    <Icon size={44} className={project.iconColor || "text-slate-800"} strokeWidth={1.5} />
+                )}
+            </div>
+        </div>
+    );
+};
+
 export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) => {
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     const handleProjectClick = (project: Project) => {
-        if (project.id === 'flutterlog' && onOpenProject) {
-            onOpenProject(project.id);
-        } else {
-            setSelectedProject(project);
-        }
+        // 모든 프로젝트가 동일한 심플 모달뷰(setSelectedProject)를 사용하도록 통일
+        setSelectedProject(project);
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-fr">
-            {projects.map((project, index) => {
-                // FlutterLog is always large (index 0)
-                const isVertical = index === 0;
-                
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+            {projects.map((project) => {
                 return (
                     <motion.div 
                         key={project.id}
                         whileHover={{ y: -5 }}
                         onClick={() => handleProjectClick(project)}
-                        className={`group relative bg-white rounded-[2.5rem] p-0 border border-slate-200 shadow-xl overflow-hidden cursor-pointer flex flex-col ${
-                            isVertical ? 'lg:col-span-1 lg:row-span-2' : 'lg:col-span-2 md:flex-row'
-                        }`}
+                        className="group relative bg-[#050510] rounded-[2.5rem] p-0 border border-slate-800/80 shadow-2xl overflow-hidden cursor-pointer flex flex-col col-span-1 min-h-[460px] backdrop-blur-md"
                     >
-                        {/* Banner Area - Updated Logic for New Previews */}
-                        <div className={`
-                            relative overflow-hidden flex items-center justify-center transition-colors duration-500
-                            ${project.bgColor}
-                            ${isVertical ? 'h-72 flex-1' : 'h-52 md:h-auto md:w-1/2'}
-                        `}>
-                            {/* Render Specific Previews based on ID */}
-                            {project.id === 'flutterlog' && <LiveChatPreview />}
-                            {project.id === 'mirai' && <MiraiPreview />}
-                            {project.id === 'deepdive' && <DeepDivePreview />}
+                        <div className="relative overflow-hidden flex items-center justify-center transition-colors duration-500 h-64 shrink-0 bg-[#0A0A0A]">
+                            <CardBanner project={project} />
                         </div>
 
-                        {/* Content Area */}
-                        <div className={`
-                            flex flex-col items-start justify-center
-                            ${isVertical ? 'p-8' : 'p-8 md:w-1/2'}
-                        `}>
-                            <div className="flex items-center gap-3 mb-3">
-                                <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest ${
-                                    project.id === 'mirai' ? 'bg-blue-100 text-blue-700' :
-                                    project.id === 'deepdive' ? 'bg-sky-100 text-sky-700' :
-                                    'bg-blue-100 text-blue-700'
-                                }`}>{project.category}</span>
-                                <span className="text-slate-400 text-xs font-mono">{project.tag}</span>
+                        <div className="flex flex-col items-start justify-start p-8 flex-1 text-left bg-gradient-to-b from-[#050510] to-[#0A0A15]">
+                            <div className="flex items-center gap-4 mb-4">
+                                <span className="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                                    {project.category}
+                                </span>
+                                <span className="text-slate-400 text-xs font-black uppercase tracking-widest">{project.tag}</span>
                             </div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">{project.title}</h3>
-                            <p className="text-sm text-slate-500 font-medium leading-relaxed mb-6 line-clamp-3">
+                            <h3 className="text-3xl font-black text-white mb-3 tracking-tight group-hover:text-white/90 transition-colors">{project.title}</h3>
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed mb-8 line-clamp-3">
                                 {project.desc}
                             </p>
                             
-                             <button className="text-xs font-bold text-slate-900 hover:text-blue-600 transition-colors flex items-center gap-1 group/btn">
-                                View Case <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                             <button className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 group/btn mt-auto">
+                                View Details <ExternalLink size={14} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform ml-1" />
                              </button>
                         </div>
                     </motion.div>
@@ -535,129 +574,65 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) =
             <AnimatePresence>
                 {selectedProject && (
                     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setSelectedProject(null)} />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#020617]/90 backdrop-blur-xl" onClick={() => setSelectedProject(null)} />
                         
-                        {/* MIRAI SPECIFIC LAYOUT */}
-                        {selectedProject.id === 'mirai' ? (
-                            <motion.div 
+                        <motion.div 
                                 initial={{ scale: 0.95, opacity: 0, y: 40 }} 
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.95, opacity: 0, y: 40 }}
-                                className="w-full max-w-6xl bg-white rounded-[3rem] shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[95vh] border border-slate-200"
+                                className="w-full max-w-7xl bg-[#090b16] rounded-[3rem] shadow-[0_0_80px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden flex flex-col max-h-[92vh] border border-slate-700/80 backdrop-blur-md"
                             >
-                                {/* Header */}
-                                <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-20">
+                                <div className="p-8 px-10 border-b border-slate-800/80 flex justify-between items-center bg-[#090b16] sticky top-0 z-20">
                                     <div className="flex items-center gap-5">
-                                        <MiraiLogo size="small" />
-                                        <div>
-                                            <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-none">{selectedProject.detailTitle}</h2>
-                                            <span className="text-xs font-bold text-cyan-500 tracking-widest uppercase">{selectedProject.detailSub}</span>
-                                        </div>
-                                    </div>
-                                    <button onClick={() => setSelectedProject(null)} className="p-3 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
-                                        <X size={24} />
-                                    </button>
-                                </div>
-
-                                {/* Body */}
-                                <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/50">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                                        {/* Left: Execution Image (App Mockup) */}
-                                        <div className="flex justify-center bg-slate-200/50 rounded-[3rem] p-10 border border-white shadow-inner">
-                                            <MiraiAppMockup />
-                                        </div>
-
-                                        {/* Right: Technical Details */}
-                                        <div className="space-y-10">
-                                            <div>
-                                                <h4 className="flex items-center gap-2 text-xl font-bold text-slate-900 mb-4">
-                                                    <Settings2 size={20} className="text-cyan-500"/> 
-                                                    기술적 접근 (Technical Approach)
-                                                </h4>
-                                                <p className="text-slate-600 leading-relaxed font-medium text-lg">
-                                                    {selectedProject.techDesc}
-                                                </p>
-                                            </div>
-
-                                            <div className="p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
-                                                <h5 className="font-bold text-slate-900 mb-6 text-sm uppercase tracking-wide flex items-center gap-2">
-                                                    <Sparkles size={16} className="text-cyan-500" /> 핵심 기능 (Key Features)
-                                                </h5>
-                                                <ul className="space-y-4">
-                                                    {selectedProject.features.map((feat, i) => (
-                                                        <li key={i} className="flex items-center gap-3 text-slate-600 font-medium">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
-                                                            {feat}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            <div className="bg-[#1e293b] text-slate-300 p-8 rounded-3xl font-mono text-sm leading-relaxed shadow-xl relative overflow-hidden">
-                                                <div className="absolute top-0 right-0 p-4 opacity-20">
-                                                    <Code size={40} />
-                                                </div>
-                                                <div className="flex gap-2 mb-6 border-b border-slate-600 pb-4">
-                                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                                    <span className="ml-auto opacity-50 text-xs">config.json</span>
-                                                </div>
-                                                <p>
-                                                    <span className="text-purple-400">const</span> <span className="text-blue-400">{selectedProject.configSnippet.var}</span> = {'{'}<br/>
-                                                    &nbsp;&nbsp;model: <span className="text-green-400">"{selectedProject.configSnippet.model}"</span>,<br/>
-                                                    &nbsp;&nbsp;temperature: <span className="text-orange-400">{selectedProject.configSnippet.temp}</span>,<br/>
-                                                    &nbsp;&nbsp;context_window: <span className="text-orange-400">{selectedProject.configSnippet.ctx}</span>,<br/>
-                                                    &nbsp;&nbsp;plugins: <span className="text-green-400">{selectedProject.configSnippet.plugins}</span><br/>
-                                                    {'}'};
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ) : (
-                            // DEFAULT LAYOUT (Existing)
-                            <motion.div 
-                                initial={{ scale: 0.95, opacity: 0, y: 40 }} 
-                                animate={{ scale: 1, opacity: 1, y: 0 }}
-                                exit={{ scale: 0.95, opacity: 0, y: 40 }}
-                                className="w-full max-w-5xl bg-white rounded-[3rem] shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] border border-slate-200"
-                            >
-                                <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-20">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                                            <Layers size={20} />
+                                        <div className={`w-14 h-14 ${selectedProject.bgColor} rounded-2xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] border border-slate-700/50`}>
+                                            {selectedProject.lucideIcon ? (
+                                                <selectedProject.lucideIcon size={26} /> 
+                                            ) : selectedProject.icon ? (
+                                                <img src={selectedProject.icon} className="w-full h-full object-cover scale-110 rounded-2xl" alt="logo" />
+                                            ) : (
+                                                <Layers size={26} />
+                                            )}
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-none">{selectedProject.detailTitle}</h2>
-                                            <span className="text-xs font-mono text-slate-400">{selectedProject.detailSub}</span>
+                                            <h2 className="text-3xl font-black text-white tracking-tight leading-none mb-1 shadow-black drop-shadow-sm">{selectedProject.detailTitle}</h2>
+                                            <span className="text-xs font-black tracking-widest text-indigo-400 uppercase">{selectedProject.detailSub}</span>
                                         </div>
                                     </div>
-                                    <button onClick={() => setSelectedProject(null)} className="p-3 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
-                                        <X size={24} />
-                                    </button>
+                                    <div className="flex gap-4 items-center">
+                                        {selectedProject.url && (
+                                            <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-full transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                                                <ExternalLink size={16} /> 사이트 방문
+                                            </a>
+                                        )}
+                                        <button onClick={() => setSelectedProject(null)} className="p-3 hover:bg-slate-800 rounded-full transition-colors text-slate-400">
+                                            <X size={24} />
+                                        </button>
+                                    </div>
                                 </div>
                                 
-                                <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/50">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                                        <div>
-                                            <div className="mb-8">
-                                                <h4 className="flex items-center gap-2 text-xl font-bold text-slate-900 mb-4">
-                                                    <Settings2 size={20} className="text-blue-600"/> 
+                                <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+                                        
+                                        {/* Left Column: Descriptions */}
+                                        <div className="lg:col-span-2 flex flex-col space-y-12">
+                                            <div>
+                                                <h4 className="flex items-center gap-2 text-2xl font-black text-white mb-5 tracking-tight">
+                                                    <Settings2 size={24} className="text-indigo-400"/> 
                                                     Technical Approach
                                                 </h4>
-                                                <p className="text-slate-600 leading-relaxed font-medium">
+                                                <p className="text-slate-300 leading-relaxed font-medium text-[15px]">
                                                     {selectedProject.techDesc}
                                                 </p>
                                             </div>
 
-                                            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm mb-6">
-                                                <h5 className="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wide">Key Features</h5>
-                                                <ul className="space-y-3">
+                                            <div className="p-8 bg-[#02040a] rounded-[2rem] border border-slate-800 shadow-inner h-full">
+                                                <h5 className="font-black text-white mb-6 text-sm uppercase tracking-widest flex items-center gap-3">
+                                                    <Sparkles size={18} className="text-indigo-400" /> Key Features
+                                                </h5>
+                                                <ul className="space-y-5">
                                                     {selectedProject.features.map((feat, i) => (
-                                                        <li key={i} className="flex items-center gap-3 text-slate-600 text-sm font-medium">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                                        <li key={i} className="flex items-start gap-3 text-slate-400 text-[15px] font-medium leading-normal">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] mt-2 shrink-0"></div>
                                                             {feat}
                                                         </li>
                                                     ))}
@@ -665,30 +640,67 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) =
                                             </div>
                                         </div>
                                         
-                                        <div className="flex flex-col gap-6">
-                                            <div className="bg-slate-900 text-slate-300 p-6 rounded-2xl font-mono text-xs leading-relaxed shadow-lg">
-                                                <div className="flex gap-2 mb-4 border-b border-slate-700 pb-2">
-                                                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                                    <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                                    <span className="ml-auto opacity-50">config.json</span>
+                                        {/* Right Column: Interactive Live Preview Block */}
+                                        <div className="lg:col-span-3 flex flex-col items-center justify-center min-h-[450px]">
+                                            {selectedProject.deviceMode === 'mobile' ? (
+                                                <div className="relative w-[340px] h-[680px] rounded-[3.5rem] border-[12px] border-[#1a1a24] shadow-[0_0_80px_rgba(0,0,0,0.6)] bg-[#090b16] overflow-hidden flex flex-col shrink-0">
+                                                    {/* Dynamic Island Mock */}
+                                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1a1a24] rounded-b-3xl z-30"></div>
+                                                    {/* Mobile App View */}
+                                                    <div className="flex-1 w-full relative bg-[#050510]">
+                                                        {selectedProject.url ? (
+                                                            <iframe src={selectedProject.url} className="w-full h-full border-none absolute inset-0 bg-white" title={selectedProject.title} />
+                                                        ) : (
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
+                                                                <Globe size={48} className="opacity-20 mb-4" />
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <p>
-                                                    <span className="text-purple-400">const</span> <span className="text-blue-400">{selectedProject.configSnippet.var}</span> = {'{'}<br/>
-                                                    &nbsp;&nbsp;model: <span className="text-green-400">"{selectedProject.configSnippet.model}"</span>,<br/>
-                                                    &nbsp;&nbsp;temperature: <span className="text-orange-400">{selectedProject.configSnippet.temp}</span>,<br/>
-                                                    &nbsp;&nbsp;context_window: <span className="text-orange-400">{selectedProject.configSnippet.ctx}</span>,<br/>
-                                                    &nbsp;&nbsp;plugins: <span className="text-green-400">{selectedProject.configSnippet.plugins}</span><br/>
-                                                    {'}'};
-                                                </p>
-                                            </div>
-                                            {/* Optional custom component for specific projects */}
-                                            {selectedProject.statsComponent}
+                                            ) : (
+                                                <div className="w-full h-[500px] lg:h-[600px] flex-1 rounded-[2rem] overflow-hidden flex flex-col border border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.4)] bg-[#02040a]">
+                                                    {/* MacOS Window Control Bar */}
+                                                    <div className="h-12 border-b border-slate-800 flex items-center px-5 gap-2 shrink-0 bg-[#090b16]">
+                                                        <div className="flex gap-2">
+                                                            <div className="w-3.5 h-3.5 rounded-full bg-rose-500/80"></div>
+                                                            <div className="w-3.5 h-3.5 rounded-full bg-amber-500/80"></div>
+                                                            <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/80"></div>
+                                                        </div>
+                                                        <div className="mx-auto px-6 py-1.5 rounded-full bg-[#02040a] text-[11px] font-bold text-slate-400 tracking-widest font-mono border border-slate-800 truncate mix-blend-screen shadow-inner max-w-sm">
+                                                            {selectedProject.url?.replace('https://', '') || 'localhost'}
+                                                        </div>
+                                                        <div className="w-10"></div> {/* spacer for centering */}
+                                                    </div>
+                                                    
+                                                    {/* Render IFrame Live Browser View */}
+                                                    <div className="flex-1 w-full bg-[#050510] relative group">
+                                                        {selectedProject.url ? (
+                                                            <div className="absolute inset-0 overflow-hidden bg-white">
+                                                                <iframe 
+                                                                    src={selectedProject.url} 
+                                                                    style={{
+                                                                        width: selectedProject.iframeScale ? `${100 / selectedProject.iframeScale}%` : '100%',
+                                                                        height: selectedProject.iframeScale ? `${100 / selectedProject.iframeScale}%` : '100%',
+                                                                        transform: selectedProject.iframeScale ? `scale(${selectedProject.iframeScale})` : 'none',
+                                                                        transformOrigin: 'top left'
+                                                                    }}
+                                                                    className="border-none absolute top-0 left-0 bg-white" 
+                                                                    title={selectedProject.title} 
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
+                                                                <Globe size={64} className="opacity-20 mb-4" />
+                                                                <span className="text-sm font-black uppercase tracking-widest text-slate-500">Live Preview Unavailable</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </motion.div>
-                        )}
                     </div>
                 )}
             </AnimatePresence>

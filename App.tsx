@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Process } from './components/sections/Process';
@@ -20,17 +22,35 @@ import { FlutterLogDetail } from './components/FlutterLogDetail';
 const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<'main' | 'flutterlog'>('main');
 
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+        });
+
+        function raf(time: number) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        return () => {
+            lenis.destroy();
+        };
+    }, []);
+
     const handleOpenProject = (id: string) => {
         if (id === 'flutterlog') {
             setCurrentView('flutterlog');
-            // Reset scroll when opening detail view
             window.scrollTo(0, 0);
         }
     };
 
     const handleBackToMain = () => {
         setCurrentView('main');
-        // Optional: Return to portfolio section position
         setTimeout(() => {
             const portfolioSection = document.getElementById('portfolio');
             if (portfolioSection) {
@@ -40,7 +60,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white selection:bg-blue-500 selection:text-white font-sans text-slate-900 overflow-x-hidden relative">
+        <div className="min-h-screen bg-slate-950 selection:bg-blue-600 selection:text-white font-sans text-slate-100 overflow-x-hidden relative">
 
             <AnimatePresence>
                 {currentView === 'flutterlog' && (
@@ -49,22 +69,23 @@ const App: React.FC = () => {
             </AnimatePresence>
 
             <div style={{ display: currentView === 'main' ? 'block' : 'none' }}>
-                {/* Global Grid Background */}
+                {/* Majestic Deep Dark Background Layer */}
                 <div className="fixed inset-0 pointer-events-none z-0">
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_100%)] opacity-80"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"></div>
                 </div>
 
-                <Navigation />
-                <Hero />
-                <About />
-                <Process />
-                <Services />
-                <TypographyAnimation />
-                <Portfolio onOpenProject={handleOpenProject} />
-                <Contact />
-                <Footer />
-                <ScrollToTop />
+                <div className="relative z-10 w-full h-full">
+                    <Navigation />
+                    <Hero />
+                    <About />
+                    <Process />
+                    <Services />
+                    <TypographyAnimation />
+                    <Portfolio onOpenProject={handleOpenProject} />
+                    <Contact />
+                    <Footer />
+                    <ScrollToTop />
+                </div>
             </div>
         </div>
     );

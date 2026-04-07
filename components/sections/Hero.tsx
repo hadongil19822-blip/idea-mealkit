@@ -213,30 +213,32 @@ export const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-bold tracking-widest uppercase mb-8 border border-blue-100 shadow-sm">
+                        <div className="inline-flex items-center gap-2 px-5 py-2 bg-blue-950/50 text-blue-300 rounded-full text-xs font-bold tracking-widest uppercase mb-8 border border-blue-800/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                             <Terminal size={12} />
                             Premium Digital Cuisine
                         </div>
-                        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-black text-slate-900 leading-[0.9] tracking-tighter mb-8">
+                        <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[6.5rem] font-black text-white leading-[0.9] tracking-tighter mb-8 drop-shadow-2xl px-2">
                             DEFINING<br />
                             DIGITAL<br />
-                            <span className="text-blue-500">REALITY.</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500">REALITY.</span>
                         </h1>
-                        <p className="text-lg md:text-xl text-slate-500 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed mb-10">
-                            아이디어만 준비하세요. 복잡한 기술은 저희가 다듬어 드립니다.<br className="hidden md:block" />
-                            <span className="text-slate-900 font-bold">아이디어 밀키트</span>는 비즈니스 성공을 위한 가장 신선한 레시피입니다.
+                        <p className="text-[0.95rem] sm:text-lg md:text-xl text-slate-300 max-w-xl mx-auto lg:mx-0 font-medium leading-[1.65] mb-10 break-keep">
+                            합리적인 예산, 압도적인 플랫폼 기술, 최신 AI 융합까지. <br className="hidden md:block" />
+                            <span className="text-blue-400 font-bold">아이디어 밀키트</span>는 단순한 외주사가 아닌, <br className="sm:hidden" />
+                            당신의 비즈니스를 가장 빠르고 완벽하게 <br className="hidden sm:block" />
+                            런칭할 수 있는 든든한 기술 파트너입니다.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                             <button 
                                 onClick={() => scrollToSection('contact')}
-                                className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-xl flex items-center justify-center gap-2 group"
+                                className="px-6 py-3.5 sm:px-8 sm:py-4 bg-white text-slate-950 rounded-2xl font-bold text-base sm:text-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all shadow-xl flex items-center justify-center gap-2 group"
                             >
-                                Start Project <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                Start Project <ArrowRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                             </button>
                             <button 
                                 onClick={() => scrollToSection('portfolio')}
-                                className="px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all shadow-sm"
+                                className="px-6 py-3.5 sm:px-8 sm:py-4 bg-slate-900/50 text-slate-200 border border-slate-700 rounded-2xl font-bold text-base sm:text-lg hover:bg-slate-800 transition-all shadow-sm backdrop-blur-md"
                             >
                                 View Portfolio
                             </button>
@@ -246,11 +248,11 @@ export const Hero = () => {
 
                 <div className="flex-1 w-full max-w-md lg:max-w-full lg:flex lg:justify-center relative">
                     <PhoneMockup />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100 to-indigo-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-blue-600/30 via-indigo-600/20 to-purple-600/30 rounded-full blur-[100px] -z-10 opacity-70 animate-[pulse_6s_ease-in-out_infinite]"></div>
                 </div>
             </div>
 
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-300 animate-bounce hidden lg:block">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 animate-bounce hidden lg:block">
                 <ChevronDown size={32} />
             </div>
         </header>
