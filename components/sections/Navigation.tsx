@@ -35,9 +35,8 @@ export const Navigation = () => {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-2xl' : 'bg-transparent py-8'}`}>
             <div className="container mx-auto px-6 flex items-center justify-between">
-                <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group flex-shrink-0" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                    <Logo className="w-6 h-6 sm:w-9 sm:h-9 group-hover:rotate-12 transition-transform duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] filter brightness-0 invert flex-shrink-0" />
-                    <span className="font-bold text-sm sm:text-xl tracking-widest text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] whitespace-nowrap">Idea Mealkit</span>
+                <div className="flex items-center cursor-pointer group flex-shrink-0" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <img src="/idea_mealkit_logo.png" alt="Idea Mealkit Logo" className="h-8 sm:h-10 object-contain transition-transform duration-500 group-hover:scale-105" />
                 </div>
 
                 <div className="hidden md:flex items-center gap-10">

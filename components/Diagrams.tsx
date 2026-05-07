@@ -643,19 +643,33 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) =
                                         {/* Right Column: Interactive Live Preview Block */}
                                         <div className="lg:col-span-3 flex flex-col items-center justify-center min-h-[450px]">
                                             {selectedProject.deviceMode === 'mobile' ? (
-                                                <div className="relative w-[340px] h-[680px] rounded-[3.5rem] border-[12px] border-[#1a1a24] shadow-[0_0_80px_rgba(0,0,0,0.6)] bg-[#090b16] overflow-hidden flex flex-col shrink-0">
+                                                <div className="relative w-[340px] h-[680px] rounded-[2.5rem] border-[12px] border-[#1a1a24] shadow-[0_0_80px_rgba(0,0,0,0.6)] bg-white overflow-hidden flex flex-col shrink-0">
                                                     {/* Dynamic Island Mock */}
                                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1a1a24] rounded-b-3xl z-30"></div>
                                                     {/* Mobile App View */}
-                                                    <div className="flex-1 w-full relative bg-[#050510]">
+                                                    <div className="flex-1 w-full relative bg-white pb-5"> {/* Simulated bottom safe area */}
                                                         {selectedProject.url ? (
-                                                            <iframe src={selectedProject.url} className="w-full h-full border-none absolute inset-0 bg-white" title={selectedProject.title} />
+                                                            <div className="absolute inset-0 overflow-hidden bg-white">
+                                                                <iframe 
+                                                                    src={selectedProject.url} 
+                                                                    style={{
+                                                                        width: '125%', /* 100 / 0.8 */
+                                                                        height: '125%',
+                                                                        transform: 'scale(0.8)',
+                                                                        transformOrigin: 'top left'
+                                                                    }}
+                                                                    className="border-none absolute top-0 left-0 bg-white" 
+                                                                    title={selectedProject.title} 
+                                                                />
+                                                            </div>
                                                         ) : (
-                                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700 bg-[#050510]">
                                                                 <Globe size={48} className="opacity-20 mb-4" />
                                                             </div>
                                                         )}
                                                     </div>
+                                                    {/* Fake Home Indicator */}
+                                                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-black/20 rounded-full z-30 pointer-events-none"></div>
                                                 </div>
                                             ) : (
                                                 <div className="w-full h-[500px] lg:h-[600px] flex-1 rounded-[2rem] overflow-hidden flex flex-col border border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.4)] bg-[#02040a]">

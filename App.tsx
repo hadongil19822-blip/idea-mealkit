@@ -18,9 +18,14 @@ import { Footer } from './components/sections/Footer';
 import { Navigation } from './components/sections/Navigation';
 import { ScrollToTop } from './components/ui/ScrollToTop';
 import { FlutterLogDetail } from './components/FlutterLogDetail';
+import { ProposalPage } from './components/ProposalPage';
 
 const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<'main' | 'flutterlog'>('main');
+
+    if (window.location.pathname === '/proposal') {
+        return <ProposalPage />;
+    }
 
     useEffect(() => {
         const lenis = new Lenis({
