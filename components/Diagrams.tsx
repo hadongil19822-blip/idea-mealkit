@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smartphone, Cpu, Palette, Globe, Layers, Database, X, ArrowRight, Activity, Terminal, Code, Sparkles, BarChart3, Settings2, Box, ClipboardList, PenTool, Server, Rocket, Music, TrendingUp, Play, Pause, SkipForward, Disc, Waves, Calendar, Heart, User, Search, Menu, Home, Signal, Wifi, Battery, ScrollText, BookOpen, CloudMoon, Snowflake, Diamond, PawPrint, HeartHandshake, UserPlus, UserMinus, Star, MessageCircle, Map, ExternalLink, Shirt, Sprout, Flag, GraduationCap } from 'lucide-react';
+import { Smartphone, Cpu, Palette, Globe, Layers, Database, X, ArrowRight, Activity, Terminal, Code, Sparkles, BarChart3, Settings2, Box, ClipboardList, PenTool, Server, Rocket, Music, TrendingUp, Play, Pause, SkipForward, Disc, Waves, Calendar, Heart, User, Search, Menu, Home, Signal, Wifi, Battery, ScrollText, BookOpen, CloudMoon, Snowflake, Diamond, PawPrint, HeartHandshake, UserPlus, UserMinus, Star, MessageCircle, Map, ExternalLink, Shirt, Sprout, Flag, GraduationCap, Download } from 'lucide-react';
 import { FcCamera, FcReadingEbook, FcLandscape, FcSportsMode, FcGraduationCap as FcCap } from 'react-icons/fc';
 
 const FLUTTERLOG_ICON_URL = "https://firebasestorage.googleapis.com/v0/b/studio-6323553811-9cc93.firebasestorage.app/o/FCMImages%2F1024-1024.png?alt=media&token=fdfb49fb-1423-4b77-8e97-e5cc75048ba8";
@@ -400,6 +400,7 @@ interface Project {
         plugins: string;
     }
     statsComponent?: React.ReactNode;
+    previewImage?: string;
     deviceMode?: 'desktop' | 'mobile';
     iframeScale?: number;
     iconColor?: string;
@@ -430,7 +431,7 @@ const projects: Project[] = [
         tag: 'GENERATIVE',
         desc: '시공간 제약 없이 브랜드 세계관을 완벽히 시각화하는 가상 모델 피팅 솔루션. 생성형 AI 기술을 통해 가장 현실적인 룩북을 자동 생성합니다.',
         url: 'https://metalook.store',
-        lucideIcon: FcCamera,
+        icon: '/metalook.png',
         bgColor: 'bg-indigo-900', 
         detailTitle: 'MetaLook Studio',
         detailSub: 'AI VIRTUAL MODEL PLATFORM',
@@ -494,7 +495,7 @@ const projects: Project[] = [
         tag: 'KOREAN_LMS',
         desc: '글로벌 유저를 위한 스마트 한국어 학습 플랫폼. 다양한 게이미피케이션 요소와 음성인식을 결합해 개인화된 에듀테크 환경을 제공합니다.',
         url: 'https://fluted-lambda-470312-v4.web.app',
-        lucideIcon: FcCap,
+        icon: '/HangulWave_icon_512.png',
         bgColor: 'bg-blue-900',
         detailTitle: 'HangulWave Platform',
         detailSub: 'EDUTECH LMS SOLUTION',
@@ -502,6 +503,23 @@ const projects: Project[] = [
         features: ['Interactive Speech Recognition', 'Gamified Learning Modules', 'Real-time Grading System', 'Cloud Content Sync'],
         configSnippet: { var: 'eduEngine', model: 'tutor-llm-v4', temp: '0.4', ctx: '12000', plugins: '["stt", "tts"]' },
         deviceMode: 'mobile'
+    },
+    {
+        id: 'videodownloader',
+        title: 'Video Downloader',
+        category: 'Utility Tool',
+        tag: 'DESKTOP_APP',
+        desc: '다양한 플랫폼의 영상을 고화질로 저장할 수 있는 글로벌 비디오 다운로더 솔루션. Windows 및 macOS 환경을 완벽하게 지원합니다.',
+        url: 'https://videodown-lilac.vercel.app/',
+        icon: '/videodown.png',
+        bgColor: 'bg-slate-900',
+        detailTitle: 'Global Video Downloader',
+        detailSub: 'CROSS-PLATFORM DESKTOP APP',
+        techDesc: '효율적인 크로스 플랫폼 데스크톱 애플리케이션으로 기획되어, 다국어 지원 및 최적화된 비디오 파싱 엔진을 탑재했습니다. 빠르고 안정적인 다운로드 경험을 제공합니다.',
+        features: ['Cross-platform Support (Win/Mac)', 'Multi-language Localization', 'Automated License Verification', 'Optimized Download Engine'],
+        configSnippet: { var: 'downloadEngine', model: 'av19-parser', temp: '0.1', ctx: '2048', plugins: '["video_extractor", "license_manager"]' },
+        iframeScale: 0.8,
+        previewImage: '/video.png'
     }
 ]
 
@@ -648,7 +666,11 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) =
                                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1a1a24] rounded-b-3xl z-30"></div>
                                                     {/* Mobile App View */}
                                                     <div className="flex-1 w-full relative bg-white pb-5"> {/* Simulated bottom safe area */}
-                                                        {selectedProject.url ? (
+                                                        {selectedProject.previewImage ? (
+                                                            <div className="absolute inset-0 overflow-hidden bg-[#111]">
+                                                                <img src={selectedProject.previewImage} alt="Preview" className="w-full h-full object-cover object-top" />
+                                                            </div>
+                                                        ) : selectedProject.url ? (
                                                             <div className="absolute inset-0 overflow-hidden bg-white">
                                                                 <iframe 
                                                                     src={selectedProject.url} 
@@ -688,7 +710,11 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ onOpenProject }) =
                                                     
                                                     {/* Render IFrame Live Browser View */}
                                                     <div className="flex-1 w-full bg-[#050510] relative group">
-                                                        {selectedProject.url ? (
+                                                        {selectedProject.previewImage ? (
+                                                            <div className="absolute inset-0 overflow-hidden bg-[#111]">
+                                                                <img src={selectedProject.previewImage} alt="Preview" className="w-full h-full object-cover object-top" />
+                                                            </div>
+                                                        ) : selectedProject.url ? (
                                                             <div className="absolute inset-0 overflow-hidden bg-white">
                                                                 <iframe 
                                                                     src={selectedProject.url} 

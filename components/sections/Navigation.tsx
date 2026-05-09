@@ -36,7 +36,7 @@ export const Navigation = () => {
         <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-2xl' : 'bg-transparent py-8'}`}>
             <div className="container mx-auto px-6 flex items-center justify-between">
                 <div className="flex items-center cursor-pointer group flex-shrink-0" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                    <img src="/idea_mealkit_logo.png" alt="Idea Mealkit Logo" className="h-8 sm:h-10 object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <img src="/logo.png" alt="Idea Mealkit Logo" className="h-8 sm:h-10 object-contain transition-transform duration-500 group-hover:scale-105" />
                 </div>
 
                 <div className="hidden md:flex items-center gap-10">

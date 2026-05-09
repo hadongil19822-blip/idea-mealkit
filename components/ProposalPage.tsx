@@ -68,7 +68,7 @@ export const ProposalPage: React.FC = () => {
             >
                 {/* Logo */}
                 <div className="mb-16">
-                    <img src="/idea_mealkit_logo.png" alt="아이디어밀키트 로고" className="h-10 md:h-12 object-contain" />
+                    <img src="/logo.png" alt="아이디어밀키트 로고" className="h-10 md:h-12 object-contain" />
                 </div>
 
                 <p className="text-blue-600 font-bold text-sm tracking-wider mb-6">MAIN POINT</p>
