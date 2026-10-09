@@ -6,9 +6,10 @@ import 'lenis/dist/lenis.css';
 import { type Project } from './projects';
 import { ProjectCover } from './ProjectCover';
 import { MealkitMark, ContactSection } from './StudioChrome';
-import { PortfolioCanvas } from './PortfolioCanvas';
-import { createCanvasMotion } from './canvas-motion';
-import './portfolio-canvas.css';
+import { MotionAtlas } from './MotionAtlas';
+import { createAtlasMotion, atlasStops, atlasDuration } from './atlas-motion';
+import './showroom-shell.css';
+import './motion-atlas.css';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -16,6 +17,9 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 
 function sectionDestination(hash: string, element: HTMLElement) {
   if (hash === '#top') return 0;
+  const atlas = ScrollTrigger.getById('motion-atlas');
+  const chapter = hash === '#projects' ? atlasStops.metalook : atlasStops[hash.slice('#project-'.length)];
+  if (atlas && chapter !== undefined) return atlas.start + (atlas.end - atlas.start) * chapter / atlasDuration;
   return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 64 : 0);
 }
 
@@ -23,6 +27,7 @@ export default function Showroom() {
   const root = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const smoothScroll = useRef<Lenis | null>(null);
+  const [motionPaused, setMotionPaused] = useState(false);
   const [selected, setSelected] = useState<Project | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const initialSection = useRef(location.hash || '#top');
@@ -46,6 +51,7 @@ export default function Showroom() {
         if (reduced) return () => { delete element.dataset.layout; };
         element.dataset.motion = 'on';
         let tick: ((time: number) => void) | undefined;
+        let releaseMotion: (() => void) | undefined;
         let releaseNativeInput: (() => void) | undefined;
         if (desktop) {
           lenis = new Lenis({ lerp: .16, autoRaf: false, anchors: false });
@@ -53,7 +59,7 @@ export default function Showroom() {
           tick = (time: number) => lenis?.raf(time * 1000);
           lenis.on('scroll', ScrollTrigger.update);
           gsap.ticker.add(tick);
-          createCanvasMotion(element, true);
+          releaseMotion = createAtlasMotion(element);
           // A new drag or navigation key takes over from any wheel inertia.
           const releaseInertia = () => lenis?.scrollTo(window.scrollY, { immediate: true });
           const navigationKey = (event: KeyboardEvent) => {
@@ -67,12 +73,13 @@ export default function Showroom() {
             window.removeEventListener('pointerdown', releaseInertia);
             window.removeEventListener('keydown', navigationKey);
           };
-        } else createCanvasMotion(element, false);
+        } else releaseMotion = createAtlasMotion(element);
         const visibility = () => document.hidden ? lenis?.stop() : lenis?.start();
         document.addEventListener('visibilitychange', visibility);
         return () => {
           document.removeEventListener('visibilitychange', visibility);
           releaseNativeInput?.();
+          releaseMotion?.();
           if (tick) gsap.ticker.remove(tick);
           lenis?.destroy(); lenis = undefined; smoothScroll.current = null;
           delete element.dataset.motion; delete element.dataset.layout;
@@ -132,11 +139,11 @@ export default function Showroom() {
 
   function open(project: Project) { returnFocus.current = document.activeElement as HTMLElement; setSelected(project); }
 
-  return <div className="format-site" ref={root} onClick={navigateSection}>
+  return <div className="format-site" data-motion-paused={motionPaused || undefined} data-dialog-open={Boolean(selected) || undefined} ref={root} onClick={navigateSection}>
     <a className="skip-link" href="#projects">프로젝트로 건너뛰기</a>
-    <header className="canvas-nav"><a href="#top" aria-label="IDEA MEALKIT 처음으로">IDEA MEALKIT</a><div><a href="#projects">프로젝트 (05)</a><a href="#contact">LET’S TALK ↗</a></div></header>
+    <header className="canvas-nav"><a href="#top" aria-label="IDEA MEALKIT 처음으로">IDEA MEALKIT</a><div><a href="#projects">프로젝트 (05)</a><button className="motion-pause" aria-pressed={motionPaused} onClick={() => setMotionPaused(!motionPaused)}>{motionPaused ? '모션 재생' : '모션 정지'}</button><a href="#contact">LET’S TALK ↗</a></div></header>
     <main>
-      <PortfolioCanvas open={open} />
+      <MotionAtlas open={open} />
       <ContactSection />
     </main>
     <footer className="reference-footer"><MealkitMark className="reference-footer-mark" word="MEALKIT" /><div className="footer-info"><span>© {new Date().getFullYear()} IDEA MEALKIT — Web, App & AI Studio</span><a href="mailto:hadongil19822@gmail.com">hadongil19822@gmail.com ↗</a><a href="https://pf.kakao.com/_mxbzgn/chat" target="_blank" rel="noopener noreferrer">프로젝트 문의 ↗</a><a href="#top">Back to top ↑</a></div></footer>
