@@ -8,11 +8,14 @@ import { ProjectCover } from './ProjectCover';
 import './reference-site.css';
 import './mealkit-identity.css';
 import { MealkitMark, InfoBar, OpeningComposition, ProjectScenes, ClosingScene, ContactSection } from './ReferenceScenes';
-import { createReferenceMotion } from './reference-motion';
+import { createReferenceMotion, chapterStops } from './reference-motion';
+import { createMobileMotion } from './mobile-motion';
 import { installPointerDepth } from './interactive-motion';
 import './motion-refinements.css';
+import './experience-v2.css';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 export default function Showroom() {
   const root = useRef<HTMLDivElement>(null);
@@ -27,19 +30,31 @@ export default function Showroom() {
     const media = gsap.matchMedia();
     let alive = true;
     const context = gsap.context(() => {
-      media.add('(prefers-reduced-motion: no-preference)', () => {
-        lenis = new Lenis({ duration: 1.05, autoRaf: false, anchors: false });
-        smoothScroll.current = lenis;
-        const tick = (time: number) => lenis?.raf(time * 1000);
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add(tick);
-        root.current!.dataset.motion = 'on';
-        createReferenceMotion();
+      media.add({ desktop: '(min-width:768px)', mobile: '(max-width:767px)', reduced: '(prefers-reduced-motion: reduce)' }, condition => {
+        const { desktop, reduced } = condition.conditions!;
+        const element = root.current!;
+        element.dataset.layout = desktop ? 'desktop' : 'mobile';
+        if (reduced) return () => { delete element.dataset.layout; };
+        element.dataset.motion = 'on';
+        let tick: ((time: number) => void) | undefined;
+        if (desktop) {
+          lenis = new Lenis({ duration: 1.05, autoRaf: false, anchors: false });
+          smoothScroll.current = lenis;
+          tick = (time: number) => lenis?.raf(time * 1000);
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add(tick);
+          createReferenceMotion();
+        } else createMobileMotion(element);
         const visibility = () => document.hidden ? lenis?.stop() : lenis?.start();
         document.addEventListener('visibilitychange', visibility);
-        return () => { document.removeEventListener('visibilitychange', visibility); gsap.ticker.remove(tick); lenis?.destroy(); lenis = undefined; smoothScroll.current = null; if (root.current) delete root.current.dataset.motion; };
+        return () => {
+          document.removeEventListener('visibilitychange', visibility);
+          if (tick) gsap.ticker.remove(tick);
+          lenis?.destroy(); lenis = undefined; smoothScroll.current = null;
+          delete element.dataset.motion; delete element.dataset.layout;
+        };
       });
-      media.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => installPointerDepth(root.current!));
+      media.add('(min-width:768px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => installPointerDepth(root.current!));
     }, root);
     const refresh = () => { if (alive) ScrollTrigger.refresh(); };
     document.fonts.ready.then(refresh);
@@ -66,13 +81,15 @@ export default function Showroom() {
   function navigateSection(event: React.MouseEvent<HTMLDivElement>) {
     const anchor = (event.target as HTMLElement).closest('a');
     const hash = anchor?.getAttribute('href');
-    if (!hash || !['#top', '#projects', '#contact'].includes(hash)) return;
+    if (!hash || (!['#top', '#projects', '#contact'].includes(hash) && !hash.startsWith('#project-'))) return;
     const element = document.getElementById(hash.slice(1));
     if (!element) return;
     event.preventDefault();
     // A pinned element's DOM position changes as it scrolls; use the trigger's start.
-    const trigger = hash === '#projects' ? ScrollTrigger.getById('project-sequence') : undefined;
-    const destination = hash === '#top' ? 0 : trigger ? trigger.start : element.getBoundingClientRect().top + window.scrollY;
+    const trigger = ScrollTrigger.getById('project-sequence');
+    const chapterTime = chapterStops[hash.slice('#project-'.length)];
+    const pinnedChapter = hash.startsWith('#project-') && trigger && chapterTime !== undefined;
+    const destination = hash === '#top' ? 0 : pinnedChapter ? trigger.start + (trigger.end - trigger.start) * chapterTime / trigger.animation!.duration() : hash === '#projects' && trigger ? trigger.start : element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 108 : 0);
     const focusTarget = () => element.focus({ preventScroll: true });
     history.replaceState(null, '', hash);
     if (smoothScroll.current) smoothScroll.current.scrollTo(destination, { onComplete: focusTarget });
@@ -89,7 +106,9 @@ export default function Showroom() {
         <h1 id="hero-title" className="sr-only">아이디어밀키트 — 웹, 앱, AI로 아이디어를 현실로 만드는 스튜디오</h1>
         <img className="opening-background" src="/projects/editorial/botanical.jpg" alt="" aria-hidden="true" />
         <div className="reference-masthead"><MealkitMark className="reference-mark" word="IDEA" /><span className="masthead-signature">작은 생각에서,<br />새로운 가능성으로.<span>Independent studio / KR</span></span><InfoBar notes={notes} setNotes={setNotes} /></div>
+        <div className="hero-statement" aria-hidden="true"><span>FIVE IDEAS.</span><span>ONE <i>KIT.</i></span><small>생각을 꺼내, 가능성을 만듭니다.<br />Scroll to unpack ↓</small></div>
         <OpeningComposition open={open} />
+        <div className="hero-transition-label" aria-hidden="true">IDEAS → REAL.</div>
       </section>
       <ProjectScenes open={open} />
       <ClosingScene />

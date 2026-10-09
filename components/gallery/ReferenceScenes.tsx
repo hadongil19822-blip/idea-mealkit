@@ -23,9 +23,9 @@ export function MealkitMark({ className = '', word = 'MEALKIT' }: { className?: 
 
 export function InfoBar({ notes, setNotes, floating = false }: { notes: boolean; setNotes: (value: boolean) => void; floating?: boolean }) {
   return <div className={`reference-info${floating ? ' floating-info' : ''}`}>
-    <span><a href="#top">IDEA MEALKIT</a> — Web, App & AI Studio</span>
-    <span className="info-middle">다섯 가지 아이디어, 각자의 가능성.<br /><a href="#projects">Explore the kit / 01—05</a></span>
-    <span className="info-actions"><label><input type="checkbox" checked={notes} onChange={event => setNotes(event.target.checked)} />제작 노트</label><a href="#contact">프로젝트 문의 ↗</a></span>
+    <span className="info-identity"><a href="#top">IDEA MEALKIT</a><span className="info-role"> — Web, App & AI Studio</span></span>
+    <span className="info-middle">Independent digital studio / KR</span>
+    <span className="info-actions"><a href="#projects">프로젝트 / 01—05</a><label><input type="checkbox" checked={notes} onChange={event => setNotes(event.target.checked)} />제작 노트</label><a href="#contact">프로젝트 문의 ↗</a></span>
   </div>;
 }
 
@@ -48,36 +48,59 @@ export function OpeningComposition({ open }: { open: (project: Project) => void 
   </div>;
 }
 
+function MobileProjectCaption({ project, open }: { project: Project; open: (project: Project) => void }) {
+  const summaries: Record<string, string> = {
+    hangulwave: '선택하고, 듣고, 이야기하며 배우는 한국어.',
+    metalook: '가상 모델부터 피팅과 룩북까지, 상상을 입히는 AI.',
+    semapage: '이미지 속 상품 정보를 검색과 AI가 읽는 웹으로.',
+    brandeye: 'AI의 답변 속에서 우리 브랜드의 다음 가능성을 찾습니다.',
+    cosmicspell: '기체와 무기를 조합해, 우주 끝까지 살아남기.',
+  };
+  return <div className="mobile-project-caption"><h3>{project.name}</h3><p>{summaries[project.id]}</p><button onClick={() => open(project)}>{project.id === 'cosmicspell' || project.id === 'hangulwave' ? '앱 자세히 보기' : '프로젝트 자세히 보기'} <span aria-hidden="true">↗</span></button></div>;
+}
+
 export function ProjectScenes({ open }: { open: (project: Project) => void }) {
   return <section className="project-sequence" id="projects" tabIndex={-1} aria-labelledby="projects-title">
     <h2 id="projects-title" className="sr-only">아이디어밀키트의 다섯 가지 프로젝트</h2>
-    <div className="sequence-background" aria-hidden="true"><img src="/projects/editorial/sculpture.jpg" alt="" /></div>
+    <div className="sequence-progress" aria-hidden="true"><span /></div>
     <div className="sequence-guides" aria-hidden="true"><span /><span /></div>
-    <article className="project-scene scene-hangul">
+    <div className="sequence-curtain" aria-hidden="true">{[0, 1, 2, 3].map(i => <span key={i} />)}</div>
+    <nav className="mobile-project-nav" aria-label="프로젝트 바로가기">{([ [projects[2], "한글"], [projects[0], "메타룩"], [projects[1], "세마"], [projects[4], "브랜드"], [projects[3], "코스믹"] ] as Array<[Project, string]>).map(([project, label]) => <a key={project.id} href={`#project-${project.id}`}>{label}</a>)}</nav>
+    <article className="project-scene scene-hangul" id="project-hangulwave" tabIndex={-1}>
+      <span className="chapter-number" aria-hidden="true">03</span>
+      <MobileProjectCaption project={projects[2]} open={open} />
       <div className="scene-side-label">03 / (HangulWave)<br />Language through stories.</div>
-      <div className="vertical-specimen paper-poster"><div className="vertical-meta"><span>03<br />(IDEA MEALKIT)</span><h3>HangulWave</h3></div><div className="vertical-columns"><div className="vertical-copy"><MiniFacts type="hangul" /><p>안녕,<br />새로운<br />이야기.</p></div><img src="/projects/hangul-choice.webp" alt="한글웨이브 이야기 선택 화면" /></div><button onClick={() => open(projects[2])}>이야기로 배우는 한국어 ↗</button></div>
+      <div className="vertical-specimen paper-poster"><div className="vertical-meta"><span>03<br />(IDEA MEALKIT)</span><h3>HangulWave</h3></div><div className="vertical-columns"><div className="vertical-copy"><span className="project-kicker">LEARN BY LIVING.</span><p>안녕,<br />새로운<br />이야기.</p><span className="project-descriptor">읽는 한국어에서,<br />이야기하는 한국어로.</span></div><img loading="lazy" decoding="async" src="/projects/hangul-choice.webp" alt="한글웨이브 이야기 선택 화면" /></div><button onClick={() => open(projects[2])}>이야기로 배우는 한국어 ↗</button></div>
       <div className="scene-huge-type" aria-hidden="true">{["안녕,", "새로운", "세계."].map((line, i) => <span className="type-line" key={line}><span>{i === 2 ? <i>{line}</i> : line}</span></span>)}</div>
       <span className="reference-note">선택하고, 듣고, 이야기하며 배우는 한국어.</span>
     </article>
-    <article className="project-scene scene-metalook">
+    <article className="project-scene scene-metalook" id="project-metalook" tabIndex={-1}>
+      <span className="chapter-number" aria-hidden="true">01</span>
+      <MobileProjectCaption project={projects[0]} open={open} />
       <div className="scene-side-label">01 / (MetaLook)<br />Beyond the frame.</div>
-      <div className="horizontal-specimen paper-poster"><div className="poster-photo"><img src="/projects/metalook.jpg" alt="MetaLook 가상 모델" /></div><div className="horizontal-copy"><div className="tiny-heading"><span>01<br />(IDEA MEALKIT)</span><h3>MetaLook</h3></div><p>Beyond<br /><i>the frame.</i></p><MiniFacts type="metalook" /><button onClick={() => open(projects[0])}>AI 패션 플랫폼 ↗</button></div><div className="horizontal-image"><img src="/projects/editorial/textile.jpg" alt="실크 주름과 금속 커프의 패션 소재 콘셉트 이미지" /><span>VIRTUAL<br />BECOMES<br />REAL.</span></div></div>
+      <div className="horizontal-specimen paper-poster"><div className="poster-photo editorial-photo"><img loading="lazy" decoding="async" src="/projects/editorial/fashion.jpg" alt="MetaLook의 AI 패션을 표현한 콘셉트 화보" /></div><div className="horizontal-copy"><div className="tiny-heading"><span>01<br />(IDEA MEALKIT)</span><h3>MetaLook</h3></div><p>Beyond<br /><i>the frame.</i></p><span className="project-descriptor">상상을 입히는 기술.<br />가상 모델 · AI 피팅 · 룩북</span><button onClick={() => open(projects[0])}>AI 패션 플랫폼 ↗</button></div><div className="horizontal-image"><img loading="lazy" decoding="async" src="/projects/editorial/textile.jpg" alt="실크 주름과 금속 커프의 패션 소재 콘셉트 이미지" /><span>VIRTUAL<br />BECOMES<br />REAL.</span></div></div>
       <div className="scene-running-type" aria-hidden="true">VIRTUAL / REAL / VIRTUAL / REAL /</div>
     </article>
-    <article className="project-scene scene-sema">
+    <article className="project-scene scene-sema" id="project-semapage" tabIndex={-1}>
+      <span className="chapter-number" aria-hidden="true">02</span>
+      <MobileProjectCaption project={projects[1]} open={open} />
       <div className="scene-side-label">02 / (Sema Page)<br />Beyond the pixels.</div>
-      <div className="sema-strips"><div className="sema-strip paper-poster"><span>02 / Input</span><strong>&lt;image&gt;</strong><div className="sema-image-fragments" role="img" aria-label="세마페이지 원본 디자인">{Array.from({ length: 8 }, (_, i) => <span key={i} aria-hidden="true" style={{ backgroundPosition: `${i % 4 * 100 / 3}% ${Math.floor(i / 4) * 100}%` }} />)}</div></div><div className="sema-strip paper-poster"><span>02 / Transform</span><strong>이미지에서,<br /><i>웹으로.</i></strong><MiniFacts type="sema" /></div><div className="sema-strip paper-poster"><span>02 / Output</span><strong>&lt;html&gt;</strong><button onClick={() => open(projects[1])}>검색과 AI가 읽는 상세페이지 ↗</button></div></div>
+      <div className="sema-strips"><div className="sema-strip paper-poster"><span>02 / Input</span><strong>&lt;image&gt;</strong><div className="sema-image-fragments" role="img" aria-label="세마페이지 원본 디자인">{Array.from({ length: 8 }, (_, i) => <span key={i} aria-hidden="true" style={{ backgroundPosition: `${i % 4 * 100 / 3}% ${Math.floor(i / 4) * 100}%` }} />)}</div></div><div className="sema-strip paper-poster"><span>02 / Transform</span><strong>이미지에서,<br /><i>웹으로.</i></strong><pre className="sema-code" aria-hidden="true">{'<article>\n  <h1>읽히는 상품.</h1>\n  <p>검색과 AI를 위한 정보.</p>\n</article>'}</pre></div><div className="sema-strip paper-poster"><span>02 / Output</span><strong>&lt;html&gt;</strong><button onClick={() => open(projects[1])}>검색과 AI가 읽는 상세페이지 ↗</button></div></div>
     </article>
-    <article className="project-scene scene-brand">
+    <article className="project-scene scene-brand" id="project-brandeye" tabIndex={-1}>
+      <span className="chapter-number" aria-hidden="true">05</span>
+      <MobileProjectCaption project={projects[4]} open={open} />
       <div className="scene-side-label">05 / (BrandEye)<br />Be seen. Be understood.</div>
       <div className="brand-disc"><div className="brand-focus-frame" aria-hidden="true" /><div className="brand-scan-beam" aria-hidden="true" /><div className="brand-disc-ring" aria-hidden="true">{['AI SEARCH', 'BRAND VISIBILITY', 'INTELLIGENCE', 'BRANDEYE'].map((text, i) => <span key={text} style={{ '--step': i } as React.CSSProperties}>{text}</span>)}</div><div className="brand-disc-content"><span>05 / BrandEye</span><h3 aria-label="Be seen. Be understood."><span className="type-line" aria-hidden="true"><span>Be seen.</span></span><span className="type-line" aria-hidden="true"><span><i>Be understood.</i></span></span></h3><p>AI의 답변 속에서,<br />우리 브랜드는 어떻게 발견될까요?</p><button onClick={() => open(projects[4])}>브랜드아이 살펴보기 ↗</button></div></div>
       <div className="brand-underlay" aria-hidden="true">BE DISCOVERED / BE REMEMBERED /</div>
     </article>
-    <article className="project-scene scene-cosmic">
+    <article className="project-scene scene-cosmic" id="project-cosmicspell" tabIndex={-1}>
+      <span className="chapter-number" aria-hidden="true">04</span>
+      <MobileProjectCaption project={projects[3]} open={open} />
       <div className="cosmic-gates" aria-hidden="true">{Array.from({ length: 5 }, (_, i) => <span key={i} />)}</div>
       <div className="scene-side-label">04 / (Cosmic Spell Survivors)<br />Survive. Go beyond.</div>
       <div className="cosmic-triangle"><div className="triangle-heading"><span>04</span><h3>COSMIC SPELL<br />SURVIVORS</h3><span>✳</span></div><div className="triangle-words">CAST.<br />DODGE.<br /><i>SURVIVE.</i></div><p>기체와 무기를 조합해<br />우주 끝까지 살아남기.</p><button onClick={() => open(projects[3])}>App Store ↗</button></div>
-      <img className="cosmic-side cosmic-side-left" src="/projects/cosmic-missiles.webp" alt="코스믹 스펠 서바이버 무기 전투" /><img className="cosmic-side cosmic-side-right" src="/projects/cosmic-boss.webp" alt="코스믹 스펠 서바이버 보스 전투" />
+      <img loading="lazy" decoding="async" className="cosmic-side cosmic-side-left" src="/projects/cosmic-missiles.webp" alt="코스믹 스펠 서바이버 무기 전투" /><img loading="lazy" decoding="async" className="cosmic-side cosmic-side-right" src="/projects/cosmic-boss.webp" alt="코스믹 스펠 서바이버 보스 전투" />
       <div className="cosmic-ribbon" aria-hidden="true">PLAY / BEYOND / PLAY / BEYOND / PLAY / BEYOND /</div>
     </article>
     <div className="sequence-index" aria-hidden="true"><span>(Selected projects)</span><div>{['03 / LANGUAGE', '01 / FASHION', '02 / HTML', '05 / AI SEARCH', '04 / PLAY'].map(text => <span key={text}>{text}</span>)}</div><span>SCROLL ↓</span></div>
@@ -88,7 +111,7 @@ export function ClosingScene() {
   const message = ['생각을', '현실로.'];
   return <section className="closing-sequence" id="studio" tabIndex={-1} aria-labelledby="closing-title">
     <div className="closing-grid" aria-hidden="true" />
-    <div className="closing-poster paper-poster"><h2 id="closing-title" aria-label="생각을 현실로.">{message.map(word => <span className="closing-word" aria-hidden="true" key={word}>{[...word].map((letter, i) => <span className="closing-letter" key={i}>{letter}</span>)}</span>)}</h2><div className="closing-poster-content"><div className="poster-photo editorial-photo"><img src="/projects/editorial/sculpture.jpg" alt="아이디어가 형태가 되는 모습을 표현한 금속 리본 조형물" /></div><div><p>상상을 화면으로.<br />화면을 서비스로.</p><span>기획 · 디자인 · 개발 · 출시</span><a href="https://pf.kakao.com/_mxbzgn/chat" target="_blank" rel="noopener noreferrer">카카오톡으로 문의하기 ↗</a><a href="mailto:hadongil19822@gmail.com">hadongil19822@gmail.com ↗</a></div></div><span className="closing-poster-foot">IDEA MEALKIT / Independent digital studio, Korea</span></div>
+    <div className="closing-poster paper-poster"><h2 id="closing-title" aria-label="생각을 현실로.">{message.map(word => <span className="closing-word" aria-hidden="true" key={word}>{[...word].map((letter, i) => <span className="closing-letter" key={i}>{letter}</span>)}</span>)}</h2><div className="closing-poster-content"><div className="poster-photo editorial-photo"><img loading="lazy" decoding="async" src="/projects/editorial/sculpture.jpg" alt="아이디어가 형태가 되는 모습을 표현한 금속 리본 조형물" /></div><div><p>상상을 화면으로.<br />화면을 서비스로.</p><span>기획 · 디자인 · 개발 · 출시</span><a href="https://pf.kakao.com/_mxbzgn/chat" target="_blank" rel="noopener noreferrer">카카오톡으로 문의하기 ↗</a><a href="mailto:hadongil19822@gmail.com">hadongil19822@gmail.com ↗</a></div></div><span className="closing-poster-foot">IDEA MEALKIT / Independent digital studio, Korea</span></div>
     <div className="closing-caption"><span>한 가지 생각, 무한한 다음.</span><span>(What’s in your kit?)</span></div>
   </section>;
 }
