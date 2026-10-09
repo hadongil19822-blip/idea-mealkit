@@ -3,35 +3,26 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
-import { projects, type Project } from './projects';
+import { type Project } from './projects';
 import { ProjectCover } from './ProjectCover';
-import './reference-site.css';
-import './mealkit-identity.css';
-import { MealkitMark, InfoBar, OpeningComposition, ProjectScenes, ClosingScene, ContactSection } from './ReferenceScenes';
-import { createReferenceMotion, chapterStops } from './reference-motion';
-import { createMobileMotion } from './mobile-motion';
-import { installPointerDepth } from './interactive-motion';
-import './motion-refinements.css';
-import './experience-v2.css';
+import { MealkitMark, ContactSection } from './StudioChrome';
+import { PortfolioCanvas } from './PortfolioCanvas';
+import { createCanvasMotion } from './canvas-motion';
+import './portfolio-canvas.css';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
 
 function sectionDestination(hash: string, element: HTMLElement) {
-  const trigger = ScrollTrigger.getById('project-sequence');
-  const chapterTime = chapterStops[hash.slice('#project-'.length)];
   if (hash === '#top') return 0;
-  if (trigger && hash.startsWith('#project-') && chapterTime !== undefined) return trigger.start + (trigger.end - trigger.start) * chapterTime / trigger.animation!.duration();
-  if (trigger && hash === '#projects') return trigger.start;
-  return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 108 : 0);
+  return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 64 : 0);
 }
 
 export default function Showroom() {
   const root = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const smoothScroll = useRef<Lenis | null>(null);
-  const [notes, setNotes] = useState(false);
   const [selected, setSelected] = useState<Project | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const initialSection = useRef(location.hash || '#top');
@@ -44,7 +35,7 @@ export default function Showroom() {
     const previousRestoration = history.scrollRestoration;
     history.scrollRestoration = 'manual';
     const initialHash = initialSection.current;
-    // Suppress the browser's own anchor jump while pin spacers are being built.
+    // Restore deep links after fonts and responsive compositions settle.
     history.replaceState(null, '', location.pathname + location.search);
     window.scrollTo({ top: 0, behavior: 'auto' });
     const context = gsap.context(() => {
@@ -62,7 +53,7 @@ export default function Showroom() {
           tick = (time: number) => lenis?.raf(time * 1000);
           lenis.on('scroll', ScrollTrigger.update);
           gsap.ticker.add(tick);
-          createReferenceMotion();
+          createCanvasMotion(element, true);
           // A new drag or navigation key takes over from any wheel inertia.
           const releaseInertia = () => lenis?.scrollTo(window.scrollY, { immediate: true });
           const navigationKey = (event: KeyboardEvent) => {
@@ -76,7 +67,7 @@ export default function Showroom() {
             window.removeEventListener('pointerdown', releaseInertia);
             window.removeEventListener('keydown', navigationKey);
           };
-        } else createMobileMotion(element);
+        } else createCanvasMotion(element, false);
         const visibility = () => document.hidden ? lenis?.stop() : lenis?.start();
         document.addEventListener('visibilitychange', visibility);
         return () => {
@@ -87,12 +78,11 @@ export default function Showroom() {
           delete element.dataset.motion; delete element.dataset.layout;
         };
       });
-      media.add('(min-width:768px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => installPointerDepth(root.current!));
     }, root);
     const refresh = () => { if (alive) ScrollTrigger.refresh(); };
     document.fonts.ready.then(() => {
       if (!alive) return;
-      // Let generated pin spacers enter layout before Lenis measures its limit.
+      // Let responsive media frames enter layout before measuring anchor positions.
       anchorFrame = requestAnimationFrame(() => {
         anchorFrame = requestAnimationFrame(() => {
           if (!alive) return;
@@ -109,8 +99,7 @@ export default function Showroom() {
         });
       });
     });
-    // Images live in fixed CSS frames; decoding them never changes pin geometry.
-    // Refreshing every lazy image load can tear down pins during an active drag.
+    // Media use fixed aspect ratios, so lazy decoding does not change scroll geometry.
     return () => { alive = false; cancelAnimationFrame(anchorFrame); history.scrollRestoration = previousRestoration; media.revert(); context.revert(); };
   }, []);
 
@@ -143,20 +132,11 @@ export default function Showroom() {
 
   function open(project: Project) { returnFocus.current = document.activeElement as HTMLElement; setSelected(project); }
 
-  return <div className={`format-site${notes ? ' notes-on' : ''}`} ref={root} onClick={navigateSection}>
+  return <div className="format-site" ref={root} onClick={navigateSection}>
     <a className="skip-link" href="#projects">프로젝트로 건너뛰기</a>
-    <InfoBar notes={notes} setNotes={setNotes} floating />
+    <header className="canvas-nav"><a href="#top" aria-label="IDEA MEALKIT 처음으로">IDEA MEALKIT</a><div><a href="#projects">프로젝트 (05)</a><a href="#contact">LET’S TALK ↗</a></div></header>
     <main>
-      <section className="reference-hero" id="top" tabIndex={-1} aria-labelledby="hero-title">
-        <h1 id="hero-title" className="sr-only">아이디어밀키트 — 웹, 앱, AI로 아이디어를 현실로 만드는 스튜디오</h1>
-        <img className="opening-background" src="/projects/editorial/botanical.jpg" alt="" aria-hidden="true" />
-        <div className="reference-masthead"><MealkitMark className="reference-mark" word="IDEA" /><span className="masthead-signature">작은 생각에서,<br />새로운 가능성으로.<span>Independent studio / KR</span></span><InfoBar notes={notes} setNotes={setNotes} /></div>
-        <div className="hero-statement" aria-hidden="true"><span>FIVE IDEAS.</span><span>ONE <i>KIT.</i></span><small>생각을 꺼내, 가능성을 만듭니다.<br />Scroll to unpack ↓</small></div>
-        <OpeningComposition open={open} />
-        <div className="hero-transition-label" aria-hidden="true">IDEAS → REAL.</div>
-      </section>
-      <ProjectScenes open={open} />
-      <ClosingScene />
+      <PortfolioCanvas open={open} />
       <ContactSection />
     </main>
     <footer className="reference-footer"><MealkitMark className="reference-footer-mark" word="MEALKIT" /><div className="footer-info"><span>© {new Date().getFullYear()} IDEA MEALKIT — Web, App & AI Studio</span><a href="mailto:hadongil19822@gmail.com">hadongil19822@gmail.com ↗</a><a href="https://pf.kakao.com/_mxbzgn/chat" target="_blank" rel="noopener noreferrer">프로젝트 문의 ↗</a><a href="#top">Back to top ↑</a></div></footer>

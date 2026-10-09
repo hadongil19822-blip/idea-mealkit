@@ -1,67 +1,40 @@
-# Idea Mealkit
+# IDEA MEALKIT
 
-아이디어밀키트의 웹·앱·AI 포트폴리오 사이트입니다.
+아이디어를 웹·앱·AI 서비스로 만드는 스튜디오의 포트폴리오입니다.
 
 ## Run locally
 
-Node.js 22 이상을 권장합니다.
+Node.js 22 이상, 별도 API 키 없이 실행합니다.
 
 ```sh
 npm ci
 npm run dev
-```
-
-개발 서버: http://localhost:3000
-
-```sh
 npm run typecheck
 npm run build
-npm run preview
 ```
 
-API 키나 별도 환경 변수 없이 실행할 수 있습니다.
+개발 서버는 http://localhost:3000 입니다. `/proposal`, `/projects/flutterlog` 기존 경로는 별도 로드합니다.
 
-## Routes and content
+## Continuous editorial canvas
 
-- `/`: IDEA MEALKIT 흑백 중심 에디토리얼 구성, 다섯 프로젝트의 스크롤 장면 전환, 스튜디오 소개와 독립된 연락 섹션
-- `/proposal`: 기존 파트너십 제안서 및 이미지 저장
-- `/projects/flutterlog`: 기존 FlutterLog 상세 소개
-- `components/gallery/projects.ts`: 프로젝트 설명, 링크, 커버 설정
-- `components/gallery/reference-site.css`: 반응형 포스터 레이아웃
-- `components/gallery/mealkit-identity.css`: 흑백 중심 색상·브랜딩·비대칭 구성
-- `components/gallery/reference-motion.ts`: 데스크톱 GSAP 스크롤 타임라인
-- `components/gallery/mobile-motion.ts`: 모바일 네이티브 스크롤 장면 등장
-- `components/gallery/experience-v2.css`: V2 에디토리얼 구성, 모바일 레이아웃·터치 영역
-- `components/gallery/ReferenceScenes.tsx`: 직접 작성한 포스터 콘텐츠와 장면
-- `public/projects/SOURCES.md`: 미리보기 이미지 출처
+- `components/gallery/PortfolioCanvas.tsx`: 커버, 다섯 프로젝트, 스튜디오 메시지
+- `components/gallery/portfolio-canvas.css`: 독립된 데스크톱·모바일 구성
+- `components/gallery/canvas-motion.ts`: 첫 진입과 스크롤 연출
+- `components/gallery/Showroom.tsx`: Lenis 수명 관리, 앵커 이동, 접근성 상세 대화상자
+- `components/gallery/StudioChrome.tsx`: IDEA / MEALKIT 워드마크, 카카오·이메일 연락 섹션
+- `components/gallery/projects.ts`: 다섯 서비스의 실제 링크와 설명
+- `public/projects/SOURCES.md`, `public/projects/editorial/`: 서비스 이미지 출처와 기존 생성 화보의 프롬프트
 
-GSAP와 ScrollTrigger로 포스터 확대와 교차 이동, 종이 스트립, 비대칭 둥근 카드·모서리 절삭 마스크 전환, 한글 글자 조립과 비스듬한 포스터 축소를 연출합니다. 768px 이상에서는 Lenis 하나를 GSAP ticker에 연결합니다. 767px 이하에서는 Lenis와 전체 화면 고정을 끄고 네이티브 스크롤을 사용합니다. 모션 감소 설정에서는 고정 스크롤을 끄고 다섯 프로젝트를 정적으로 제공합니다. 이번 2D 디자인에는 Three.js를 사용하지 않습니다.
+상단 IDEA 네 글자가 조립되고, 서로 다른 방향에서 화보와 서비스 인쇄물이 자리 잡습니다. MetaLook은 접힌 3면 화보가 화면 폭으로 펼쳐지고, 세마페이지는 이미지와 HTML 인쇄물이 교차합니다. HangulWave는 대형 한글과 앱 화면, Cosmic Spell Survivors는 게임 화면, BrandEye는 초점 프레임으로 이어집니다. 하단 MEALKIT와 연락 섹션을 유지합니다.
 
-제안서와 FlutterLog 상세는 필요한 시점에 별도 로드됩니다. Tailwind는 로컬 빌드에 포함됩니다. 프로젝트 커버는 사용자의 기존 이미지와 서비스 이름으로 만든 타이포그래피 포스터입니다.
+이전 전체 화면 고정 슬라이드와 빈 커튼 전환을 제거했습니다. 일반 문서 흐름에서 MetaLook만 CSS sticky로 짧게 머물며, GSAP ScrollTrigger pin은 사용하지 않습니다. 데스크톱은 Lenis 하나를 GSAP ticker에 연결하고, 모바일은 네이티브 스크롤을 사용합니다. 자동 반복 효과, 배경 블러, WebGL은 없습니다. 스크롤 타임라인은 `scrub: true`, 이미지 프레임은 고정 비율입니다. 새로운 포인터·이동 키 입력은 남아 있는 관성을 해제합니다.
 
-앱 화면은 전체 비율을 유지하는 프레임으로 표시하며, 포스터 자체를 움직이고 앱 이미지를 확대해 자르지 않습니다. 대형 색면은 중성색으로 통일하고 작은 배지·게임 이미지에만 절제된 색상을 남깁니다. 참조 사이트의 에셋을 사용하지 않으며, 문구·배치·도형과 스크롤 전환을 별도로 작성했습니다. 이는 법적 비침해 보증을 의미하지 않습니다.
+모션 감소 환경에서는 Lenis와 모든 GSAP 동작을 생략하고 완성된 정적 구성을 표시합니다. 미디어는 기존 생성 화보와 실제 서비스 화면을 사용하며, 앱 스크린샷은 `object-fit: contain`으로 전체를 표시합니다. 참고 사이트의 코드·이미지·문구는 사용하지 않았습니다.
 
-연락 섹션(`#contact`)은 포스터 축소 애니메이션 다음에 실제 크기로 표시됩니다. 카카오 채널의 공개 대화 버튼에서 확인한 1:1 채팅 주소와 `mailto:hadongil19822@gmail.com`을 제공합니다. 모바일에서도 이메일 주소를 숨기지 않습니다. IDEA / MEALKIT 워드마크의 장식 점은 제거했습니다.
+카카오: https://pf.kakao.com/_mxbzgn/chat
 
-## Motion expansion
+이메일: hadongil19822@gmail.com
 
-- 포스터의 종이 층과 마우스 위치에 반응하는 미세한 입체 회전
-- MetaLook 화보의 3개 면이 아코디언처럼 펼쳐지는 전환
-- Sema Page 서비스 이미지 8조각 조립과 HTML 출력 마스크
-- BrandEye 스크롤 스캔 및 초점 프레임
-- Cosmic 우주 공간의 원근 프레임 통과
-- 문의 내용의 순차 등장과 버튼 화살표 반응
+## Verification
 
-포인터 효과는 정밀 포인터와 모션 허용 환경에서만 적용하며, 마우스 이탈·클릭·창 비활성화 시 회전을 초기화합니다. 이벤트 리스너와 트윈은 정리됩니다. 자동 반복 효과는 없습니다. 앱 스크린샷의 전체 비율은 유지합니다.
-
-## V2 editorial and mobile
-
-첫 화면의 화보와 타이포 크기를 키우고, 반복 배경을 제거했습니다. 프로젝트는 각자 다른 화면 구성을 가집니다: 한국어와 앱 프레임, 패션 3면 펼침, 이미지 8조각과 HTML, 브랜드 스캔, 게임 원근 프레임. 네 개의 종이 커튼이 장면을 연결하고, 각 장면이 완성된 상태로 머무는 구간과 진행 표시를 제공합니다.
-
-모바일은 세로 흐름 안에서 다섯 프로젝트를 전부 표시합니다. 상단 프로젝트 메뉴, 프로젝트별 설명, 44px 이상 터치 영역, 전체 화면 상세 보기와 안전 영역 패딩을 제공합니다. 모바일에서는 마우스 회전도 비활성화됩니다. 이미지에는 비율 유지·지연 로딩을 적용했습니다.
-
-검증: 타입 검사와 프로덕션 빌드, 데스크톱 장면 전환, 390px·360px 모바일 가로 넘침과 메뉴, 상세 창의 Escape·포커스 복귀, 카카오·이메일 주소를 확인했습니다. 모바일에서는 고정 스크롤 컨테이너가 0개이며, 새 탭 로드 시 콘솔 오류가 없습니다. OS 모션 감소 설정은 정적 구성을 제공하도록 구현했으며 이번 브라우저 점검에서는 OS 설정을 직접 전환하지 않았습니다.
-
-## Scroll responsiveness
-
-휠 입력은 Lenis에서 한 번만 보정하고, GSAP의 스크롤 타임라인은 `scrub: true`로 현재 위치에 바로 연결합니다. 새로운 포인터 입력이나 이동 키는 남아 있는 관성을 해제합니다. 이미지 프레임의 크기는 CSS로 고정되어 있으므로 개별 이미지 로드와 제작 노트 토글에서 ScrollTrigger를 재계산하지 않습니다. 고정 헤더의 배경 블러도 제거했습니다.
+타입 검사·프로덕션 빌드, 데스크톱/390px 모바일 구성과 앵커, 상세 대화상자 열기·Escape·포커스 복귀, 실제 앱 화면 비율, 가로 넘침과 콘솔 오류를 확인합니다. 모션 감소 분기는 코드로 검토하며 OS 설정은 변경하지 않습니다.
