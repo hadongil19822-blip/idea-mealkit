@@ -4,7 +4,7 @@ All projects are explicitly selected by the site owner. No assets from the visua
 
 - `metalook.jpg`: screenshot of the owner's live https://metalook.store, captured through the browser.
 - `semapage.jpg`: screenshot of https://semapage.ai.kr/, the production address confirmed in the owner's `sema-page` repository README; captured 2026-10-09.
-- `brandeye.jpg`: screenshot of https://scope-geo-wrg2e4mj3a-du.a.run.app/, the operating address documented in the owner's `brandeye` repository. The live service currently displays the Scope identity; the portfolio uses the owner's requested BrandEye project name. Captured 2026-10-09.
+- `brandeye.jpg`: screenshot of https://brandeye.ai.kr/, the production domain confirmed by the owner. Captured through the browser on 2026-10-09; replaces the older Scope service screenshot.
 - `/HangulWave_icon_512.png`, `/metalook.png`: existing project logos in this repository.
 - `cosmic-icon.png`: the owner's official app icon from `hadongil19822-blip/cosmic-spell-survivors-support/assets/app-icon.png` on GitHub, read through the GitHub connector.
 
