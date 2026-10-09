@@ -18,7 +18,7 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 function sectionDestination(hash: string, element: HTMLElement) {
   if (hash === '#top') return 0;
   const atlas = ScrollTrigger.getById('motion-atlas');
-  const chapter = hash === '#projects' ? atlasStops.metalook : atlasStops[hash.slice('#project-'.length)];
+  const chapter = hash === '#projects' ? atlasStops.projects : atlasStops[hash.slice('#project-'.length)];
   if (atlas && chapter !== undefined) return atlas.start + (atlas.end - atlas.start) * chapter / atlasDuration;
   return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 64 : 0);
 }
@@ -141,7 +141,7 @@ export default function Showroom() {
 
   return <div className="format-site" data-motion-paused={motionPaused || undefined} data-dialog-open={Boolean(selected) || undefined} ref={root} onClick={navigateSection}>
     <a className="skip-link" href="#projects">프로젝트로 건너뛰기</a>
-    <header className="canvas-nav"><a href="#top" aria-label="IDEA MEALKIT 처음으로">IDEA MEALKIT</a><div><a href="#projects">프로젝트 (05)</a><button className="motion-pause" aria-pressed={motionPaused} onClick={() => setMotionPaused(!motionPaused)}>{motionPaused ? '모션 재생' : '모션 정지'}</button><a href="#contact">LET’S TALK ↗</a></div></header>
+    <header className="canvas-nav"><a href="#top" aria-label="IDEA MEALKIT 처음으로">IDEA MEALKIT</a><div><a href="#projects">STUDIO & WORK</a><button className="motion-pause" aria-pressed={motionPaused} onClick={() => setMotionPaused(!motionPaused)}>{motionPaused ? '모션 재생' : '모션 정지'}</button><a href="#contact">LET’S TALK ↗</a></div></header>
     <main>
       <MotionAtlas open={open} />
       <ContactSection />

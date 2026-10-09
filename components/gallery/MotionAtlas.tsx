@@ -34,10 +34,20 @@ export function MotionAtlas({ open }: Props) {
           </div>
           <div className="engine-baseline"><span>RAW IDEAS.</span><span>REAL POSSIBILITIES.</span><span>ASSEMBLED BY IDEA MEALKIT</span></div>
         </div>
-        <div className="atlas-cover-copy"><p>생각이<br /><i>형태가 되는 곳.</i></p><span>다섯 가지 아이디어,<br />다섯 개의 새로운 가능성.</span></div>
-        <div className="atlas-cover-foot"><span>IDEA → EXPERIENCE</span><a href="#projects">SCROLL TO TRANSFORM ↓</a><span>(01—05)</span></div>
+        <div className="atlas-cover-copy"><p>생각이<br /><i>형태가 되는 곳.</i></p><span>웹사이트부터 앱, AI 서비스까지.<br />아이디어를 실제 제품으로 만듭니다.</span></div>
+        <div className="atlas-cover-foot"><span>IDEA → EXPERIENCE</span><a href="#projects">SCROLL TO TRANSFORM ↓</a><span>WEB / APP / SERVICE</span></div>
       </section>
-      <div id="projects" className="atlas-project-anchor" tabIndex={-1} />
+      <section className="atlas-act atlas-index" id="projects" tabIndex={-1} aria-labelledby="atlas-index-title">
+        <div className="index-heading"><span>IDEA MEALKIT / DIGITAL STUDIO</span><h2 id="atlas-index-title">상상은 자유롭게.<br /><i>구현은 제대로.</i></h2><span>DESIGN · DEVELOP · LAUNCH</span></div>
+        <div className="studio-motion" aria-hidden="true">
+          <div className="studio-phase studio-web"><div className="studio-web-shutters">{Array.from({length:6},(_,i)=><span key={i} />)}</div><strong className="studio-word">{'WEB'.split('').map(c=><span key={c}>{c}</span>)}</strong></div>
+          <div className="studio-phase studio-app"><div className="studio-app-disc" /><strong className="studio-word">{'APP'.split('').map((c,i)=><span key={i}>{c}</span>)}</strong></div>
+          <div className="studio-phase studio-service"><div className="studio-service-grid">{Array.from({length:4},(_,i)=><span key={i} />)}</div><strong className="studio-word">SERVICE</strong></div>
+          <span className="studio-motion-label">IDEAS TAKE SHAPE.</span><span className="studio-motion-label label-right">DESIGNED TO WORK.</span>
+        </div>
+        <div className="studio-services"><div><span>WEB</span><p>브랜드를 담는 웹사이트</p></div><div><span>APP</span><p>일상에 닿는 애플리케이션</p></div><div><span>SERVICE</span><p>아이디어를 실현하는 AI·디지털 서비스</p></div></div>
+        <div className="index-footer"><span>기획에서 디자인, 개발과 출시까지.</span><a href="#contact">프로젝트 함께 만들기 ↗</a></div>
+      </section>
       <article className="atlas-act atlas-metalook" id="project-metalook" tabIndex={-1} aria-labelledby="atlas-metalook-title">
         <div className="fashion-aperture">
           <div className="atlas-fashion-panel fashion-image-a"><img src="/projects/editorial/fashion.jpg" alt="건축적인 실루엣의 AI 패션 콘셉트 화보" fetchPriority="high" /></div>

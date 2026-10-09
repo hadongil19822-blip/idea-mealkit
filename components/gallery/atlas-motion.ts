@@ -1,8 +1,8 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-export const atlasStops: Record<string, number> = { metalook: 2.45, semapage: 4.9, hangulwave: 7.05, cosmicspell: 9.25, brandeye: 11.55 };
-export const atlasDuration = 14;
+export const atlasStops: Record<string, number> = { projects: 2.7, metalook: 5.65, semapage: 8.1, hangulwave: 10.25, cosmicspell: 12.45, brandeye: 14.75 };
+export const atlasDuration = 17.2;
 
 /** One continuous timeline; loops own children, scroll owns their parent frames. */
 export function createAtlasMotion(root: HTMLElement) {
@@ -10,6 +10,7 @@ export function createAtlasMotion(root: HTMLElement) {
   const acts = $('.atlas-act') as HTMLElement[];
   gsap.set(acts.slice(1), { autoAlpha: 0 });
   gsap.set('.atlas-cover', { autoAlpha: 1 });
+  gsap.set('.atlas-chapters', { autoAlpha: 0 });
   gsap.from('.atlas-masthead path', { yPercent: 105, rotation: -8, stagger: .075, duration: 1.05, ease: 'power4.out' });
 
   // Reset the loop's local transforms when matchMedia rebuilds after a resize.
@@ -32,8 +33,36 @@ export function createAtlasMotion(root: HTMLElement) {
   const fashionLoop = gsap.to('.fashion-kinetic-line', { xPercent: -50, duration: 11, ease: 'none', repeat: -1, paused: true });
   const flightLoop = gsap.timeline({ repeat: -1, paused: true }).fromTo('.cosmic-flight>span', { scale: .18, rotation: -25, opacity: 0 }, { keyframes: [{ opacity: .8, duration: .35 }, { scale: 3.5, rotation: 20, opacity: 0, duration: 3.3 }], stagger: .65, ease: 'none' });
   const scanLoop = gsap.fromTo('.brand-scanner', { y: 0, opacity: 0 }, { y: () => (root.querySelector('.brand-target') as HTMLElement).offsetHeight * .8, opacity: .65, duration: 2.5, repeat: -1, yoyo: true, ease: 'power1.inOut', paused: true });
+  // The studio poster plays in place. Scroll owns its frame, this loop owns only its contents.
+  const mobile = root.dataset.layout === 'mobile';
+  gsap.set('.studio-word,.studio-word>span,.studio-web-shutters>span,.studio-app-disc,.studio-service-grid,.studio-service-grid>span', { clearProps: 'transform,opacity,visibility,borderRadius' });
+  gsap.set('.studio-app,.studio-service', { autoAlpha: 0 });
+  const studioLoop = gsap.timeline({ repeat: -1, paused: true, defaults: { ease: 'power3.inOut' } })
+    .to('.studio-web-shutters>span', { rotation: (i: number) => i % 2 ? 24 : -24, scaleY: .72, duration: 1.1, stagger: .07 }, .45)
+    .to('.studio-web .studio-word>span', { yPercent: (i: number) => i % 2 ? 15 : -15, rotation: (i: number) => (i - 1) * 8, duration: 1.1, stagger: .08 }, .45)
+    .to('.studio-web-shutters>span', { scaleY: .015, rotation: 90, duration: .9, stagger: .07 }, 2.05)
+    .to('.studio-web .studio-word>span', { yPercent: -130, rotation: -12, autoAlpha: 0, duration: .8, stagger: .08 }, 2.05)
+    .set('.studio-web', { autoAlpha: 0 }, 3.25)
+    .set('.studio-app', { autoAlpha: 1 }, 2.75)
+    .fromTo('.studio-app-disc', { scale: .05, rotation: -90, xPercent: 0 }, { scale: 1, rotation: 0, duration: 1.05 }, 2.75)
+    .fromTo('.studio-app .studio-word>span', { yPercent: 130, rotation: 12, autoAlpha: 0 }, { yPercent: 0, rotation: 0, autoAlpha: 1, duration: 1, stagger: .08 }, 2.9)
+    .to('.studio-app-disc', { xPercent: mobile ? 35 : 130, rotation: 270, duration: 1.65, ease: 'power2.inOut' }, 3.8)
+    .to('.studio-app-disc', { scale: .03, rotation: 360, duration: .8 }, 5.55)
+    .to('.studio-app .studio-word>span', { xPercent: (i: number) => (i-1)*120, scale: .3, autoAlpha: 0, duration: .8 }, 5.65)
+    .set('.studio-app', { autoAlpha: 0 }, 6.5)
+    .set('.studio-service', { autoAlpha: 1 }, 6.05)
+    .fromTo('.studio-service-grid>span', { scale: .05, rotation: -90, xPercent: (i: number) => i%2?85:-85, yPercent: (i: number) => i<2?-85:85 }, { scale: 1, rotation: 0, xPercent: 0, yPercent: 0, duration: 1.05, stagger: .08 }, 6.05)
+    .fromTo('.studio-service .studio-word', { scaleX: .1, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, duration: .9 }, 6.35)
+    .to('.studio-service-grid', { rotation: 90, duration: 1.4 }, 7.45)
+    .to('.studio-service-grid>span', { borderRadius: '50%', scale: .8, duration: 1.4, stagger: .08 }, 7.45)
+    .to('.studio-service .studio-word', { scaleX: 1.3, autoAlpha: 0, duration: .75 }, 9.15)
+    .to('.studio-service-grid>span', { scale: .01, duration: .8, stagger: .06 }, 9.15)
+    .set('.studio-service', { autoAlpha: 0 }, 10.2)
+    .set('.studio-web', { autoAlpha: 1 }, 9.75)
+    .to('.studio-web-shutters>span', { scaleY: 1, rotation: 0, duration: 1, stagger: .05 }, 9.75)
+    .to('.studio-web .studio-word>span', { yPercent: 0, rotation: 0, autoAlpha: 1, duration: 1, stagger: .05 }, 9.75);
   let active = 0;
-  const loops = [identityLoop, fashionLoop, null, null, flightLoop, scanLoop];
+  const loops = [identityLoop, fashionLoop, null, null, flightLoop, scanLoop, null, studioLoop];
   const syncLoops = () => loops.forEach((loop, i) => { if (!loop) return; if (!document.hidden && root.dataset.motionPaused !== 'true' && root.dataset.dialogOpen !== 'true' && i === active) loop.resume(); else loop.pause(); });
   const controls = $('.atlas-chapters a') as HTMLAnchorElement[];
   controls.forEach(link => link.setAttribute('aria-current', 'false'));
@@ -41,7 +70,7 @@ export function createAtlasMotion(root: HTMLElement) {
     id: 'motion-atlas', trigger: '.motion-experience', start: 'top top', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true,
     onUpdate: self => {
       const time = self.progress * atlasDuration;
-      const next = time < 1.35 ? 0 : time < 3.45 ? 1 : time < 5.85 ? 2 : time < 8 ? 3 : time < 10.25 ? 4 : time < 12.65 ? 5 : 6;
+      const next = time < 1.35 ? 0 : time < 4.55 ? 7 : time < 6.65 ? 1 : time < 9.05 ? 2 : time < 11.2 ? 3 : time < 13.45 ? 4 : time < 15.85 ? 5 : 6;
       if (next !== active) { active = next; syncLoops(); }
       controls.forEach((link, i) => link.setAttribute('aria-current', String(i + 1 === next)));
     },
@@ -50,52 +79,61 @@ export function createAtlasMotion(root: HTMLElement) {
     .to('.atlas-cover-meta,.atlas-cover-copy,.atlas-cover-foot', { autoAlpha: 0, y: -35, duration: .55 }, .1)
     .to('.kinetic-engine', { scale: 4.5, rotation: -35, duration: 1.4, ease: 'power2.in' }, 0)
     .to('.atlas-cover', { autoAlpha: 0, duration: .15 }, 1.4)
-    .set('.atlas-metalook', { autoAlpha: 1 }, 1.1)
-    .fromTo('.fashion-aperture', { scale: .06, rotation: 90, clipPath: 'inset(0% round 35%)' }, { scale: 1, rotation: 0, clipPath: 'inset(0% round 0%)', duration: 1.05 }, 1.1)
-    .from('.fashion-image-a', { rotationY: 85, duration: .8 }, 1.65)
-    .from('.fashion-image-b', { rotationY: -85, duration: .8 }, 1.65)
-    .from('.fashion-type-panel h2', { yPercent: 90, autoAlpha: 0, duration: .6 }, 1.85)
-    .from('.fashion-kinetic-line', { yPercent: 180, autoAlpha: 0, duration: .65 }, 1.7)
-    .to('.atlas-fashion-panel', { yPercent: (i: number) => i % 2 ? 145 : -145, rotation: (i: number) => i % 2 ? 12 : -12, duration: .85, stagger: .08 }, 2.85)
-    .to('.fashion-kinetic-line', { yPercent: 180, duration: .5 }, 3)
-    .to('.atlas-metalook', { autoAlpha: 0, duration: .2 }, 3.6)
-    .set('.atlas-semapage', { autoAlpha: 1 }, 3.35)
-    .from('.atlas-semapage', { clipPath: 'inset(50% 0% 50% 0%)', duration: .5 }, 3.35)
-    .from('.pixel-assembly>span', { xPercent: (i: number) => (i%3-1)*220, yPercent: (i: number) => i<3?-220:220, rotation: (i: number) => (i%2?1:-1)*50, scale: .25, opacity: 0, stagger: .045, duration: .65 }, 3.45)
-    .to('.pixel-assembly', { rotation: -90, scale: .5, autoAlpha: 0, duration: .65 }, 4.1)
-    .from('.html-ribbon', { xPercent: (i: number) => i%2?110:-110, rotation: (i: number) => i%2?-12:12, stagger: .1, duration: .8 }, 4.05)
-    .to('.html-ribbon', { xPercent: (i: number) => i%2?-115:115, rotation: (i: number) => i%2?18:-18, stagger: .07, duration: .75 }, 5.2)
-    .to('.atlas-semapage', { autoAlpha: 0, duration: .25 }, 5.95)
-    .set('.atlas-hangulwave', { autoAlpha: 1 }, 5.75)
-    .from('.atlas-hangulwave', { clipPath: 'inset(0% 50% 0% 50%)', duration: .65 }, 5.75)
-    .from('.hangul-kinetic-type>span', { yPercent: (i: number) => i%2?-160:160, rotation: (i: number) => i%2?45:-45, stagger: .08, duration: .85 }, 5.85)
-    .from('.language-frame', { yPercent: 170, rotation: (i: number) => i?25:-25, scale: .6, stagger: .12, duration: .9 }, 6.2)
-    .from('.atlas-language-copy', { y: 70, autoAlpha: 0, duration: .55 }, 6.55)
-    .to('.hangul-kinetic-type>span', { xPercent: (i: number) => (i-1)*190, rotation: (i: number) => (i-1)*75, scale: 1.6, duration: .9 }, 7.4)
-    .to('.language-frame', { yPercent: -130, rotation: (i: number) => i?-20:20, stagger: .08, duration: .8 }, 7.55)
-    .to('.atlas-language-copy', { autoAlpha: 0, duration: .3 }, 7.6)
-    .to('.atlas-hangulwave', { autoAlpha: 0, duration: .25 }, 8.15)
-    .set('.atlas-cosmicspell', { autoAlpha: 1 }, 7.95)
-    .from('.atlas-cosmicspell', { clipPath: 'inset(45% 45% 45% 45% round 10%)', duration: .8 }, 7.95)
-    .from('.cosmic-kinetic-title>span', { xPercent: (i: number) => i?110:-110, skewX: (i: number) => i?-20:20, stagger: .1, duration: .85 }, 8.15)
-    .from('.atlas-game-shot', { yPercent: (i: number) => i?-130:130, rotation: (i: number) => i?20:-20, stagger: .1, duration: .75 }, 8.45)
-    .from('.atlas-game-copy', { autoAlpha: 0, y: 35, duration: .4 }, 8.9)
-    .to('.cosmic-kinetic-title', { scale: 3, autoAlpha: 0, duration: .8 }, 9.7)
-    .to('.atlas-game-shot', { xPercent: (i: number) => i?180:-180, rotation: (i: number) => i?30:-30, duration: .7 }, 9.75)
-    .to('.atlas-game-copy', { autoAlpha: 0, duration: .3 }, 10)
-    .to('.atlas-cosmicspell', { autoAlpha: 0, duration: .25 }, 10.5)
-    .set('.atlas-brandeye', { autoAlpha: 1 }, 10.2)
-    .from('.brand-paper', { scale: .08, rotation: -45, duration: .85 }, 10.2)
-    .from('.brand-target', { scale: .3, rotation: 90, autoAlpha: 0, duration: .9 }, 10.45)
-    .from('.brand-kinetic-type>span', { xPercent: (i: number) => i?120:-120, duration: .8 }, 10.55)
-    .from('.atlas-brand-copy', { y: 50, autoAlpha: 0, duration: .6 }, 10.9)
-    .to('.brand-target', { rotation: -90, scale: 4, autoAlpha: 0, duration: .85 }, 12.05)
-    .to('.brand-kinetic-type>span', { yPercent: (i: number) => i?150:-150, duration: .65 }, 12.1)
-    .to('.atlas-brand-copy', { autoAlpha: 0, duration: .3 }, 12.2)
-    .to('.atlas-brandeye', { autoAlpha: 0, duration: .25 }, 12.8)
-    .set('.atlas-finale', { autoAlpha: 1 }, 12.65)
-    .from('.atlas-finale h2>span', { xPercent: (i: number) => i?110:-110, rotation: (i: number) => i?15:-15, stagger: .15, duration: .9 }, 12.65)
-    .from('.atlas-finale>a,.atlas-finale>span', { autoAlpha: 0, y: 30, duration: .5 }, 13.35)
+    .set('.atlas-index', { autoAlpha: 1 }, 1.1)
+    .from('.atlas-index', { clipPath: 'inset(48% 38% 48% 38%)', duration: .8 }, 1.1)
+    .from('.index-heading,.index-footer', { autoAlpha: 0, y: 25, duration: .6 }, 1.75)
+    .from('.studio-motion', { rotation: -12, scale: .4, duration: 1.1 }, 1.35)
+    .from('.studio-services>div', { y: 30, autoAlpha: 0, stagger: .09, duration: .65 }, 1.85)
+    .to('.index-heading,.index-footer,.studio-services', { autoAlpha: 0, y: -30, duration: .5 }, 3.45)
+    .to('.studio-motion', { scale: 2.8, rotation: -20, duration: 1, ease: 'power2.in' }, 3.7)
+    .to('.atlas-index', { autoAlpha: 0, duration: .35 }, 4.35)
+    .set('.atlas-metalook', { autoAlpha: 1 }, 4.3)
+    .to('.atlas-chapters', { autoAlpha: 1, duration: .35 }, 4.6)
+    .fromTo('.fashion-aperture', { scale: .06, rotation: 90, clipPath: 'inset(0% round 35%)' }, { scale: 1, rotation: 0, clipPath: 'inset(0% round 0%)', duration: 1.05 }, 4.3)
+    .from('.fashion-image-a', { rotationY: 85, duration: .8 }, 4.85)
+    .from('.fashion-image-b', { rotationY: -85, duration: .8 }, 4.85)
+    .from('.fashion-type-panel h2', { yPercent: 90, autoAlpha: 0, duration: .6 }, 5.05)
+    .from('.fashion-kinetic-line', { yPercent: 180, autoAlpha: 0, duration: .65 }, 4.9)
+    .to('.atlas-fashion-panel', { yPercent: (i: number) => i % 2 ? 145 : -145, rotation: (i: number) => i % 2 ? 12 : -12, duration: .85, stagger: .08 }, 6.05)
+    .to('.fashion-kinetic-line', { yPercent: 180, duration: .5 }, 6.2)
+    .to('.atlas-metalook', { autoAlpha: 0, duration: .2 }, 6.8)
+    .set('.atlas-semapage', { autoAlpha: 1 }, 6.55)
+    .from('.atlas-semapage', { clipPath: 'inset(50% 0% 50% 0%)', duration: .5 }, 6.55)
+    .from('.pixel-assembly>span', { xPercent: (i: number) => (i%3-1)*220, yPercent: (i: number) => i<3?-220:220, rotation: (i: number) => (i%2?1:-1)*50, scale: .25, opacity: 0, stagger: .045, duration: .65 }, 6.65)
+    .to('.pixel-assembly', { rotation: -90, scale: .5, autoAlpha: 0, duration: .65 }, 7.3)
+    .from('.html-ribbon', { xPercent: (i: number) => i%2?110:-110, rotation: (i: number) => i%2?-12:12, stagger: .1, duration: .8 }, 7.25)
+    .to('.html-ribbon', { xPercent: (i: number) => i%2?-115:115, rotation: (i: number) => i%2?18:-18, stagger: .07, duration: .75 }, 8.4)
+    .to('.atlas-semapage', { autoAlpha: 0, duration: .25 }, 9.15)
+    .set('.atlas-hangulwave', { autoAlpha: 1 }, 8.95)
+    .from('.atlas-hangulwave', { clipPath: 'inset(0% 50% 0% 50%)', duration: .65 }, 8.95)
+    .from('.hangul-kinetic-type>span', { yPercent: (i: number) => i%2?-160:160, rotation: (i: number) => i%2?45:-45, stagger: .08, duration: .85 }, 9.05)
+    .from('.language-frame', { yPercent: 170, rotation: (i: number) => i?25:-25, scale: .6, stagger: .12, duration: .9 }, 9.4)
+    .from('.atlas-language-copy', { y: 70, autoAlpha: 0, duration: .55 }, 9.75)
+    .to('.hangul-kinetic-type>span', { xPercent: (i: number) => (i-1)*190, rotation: (i: number) => (i-1)*75, scale: 1.6, duration: .9 }, 10.6)
+    .to('.language-frame', { yPercent: -130, rotation: (i: number) => i?-20:20, stagger: .08, duration: .8 }, 10.75)
+    .to('.atlas-language-copy', { autoAlpha: 0, duration: .3 }, 10.8)
+    .to('.atlas-hangulwave', { autoAlpha: 0, duration: .25 }, 11.35)
+    .set('.atlas-cosmicspell', { autoAlpha: 1 }, 11.15)
+    .from('.atlas-cosmicspell', { clipPath: 'inset(45% 45% 45% 45% round 10%)', duration: .8 }, 11.15)
+    .from('.cosmic-kinetic-title>span', { xPercent: (i: number) => i?110:-110, skewX: (i: number) => i?-20:20, stagger: .1, duration: .85 }, 11.35)
+    .from('.atlas-game-shot', { yPercent: (i: number) => i?-130:130, rotation: (i: number) => i?20:-20, stagger: .1, duration: .75 }, 11.65)
+    .from('.atlas-game-copy', { autoAlpha: 0, y: 35, duration: .4 }, 12.1)
+    .to('.cosmic-kinetic-title', { scale: 3, autoAlpha: 0, duration: .8 }, 12.9)
+    .to('.atlas-game-shot', { xPercent: (i: number) => i?180:-180, rotation: (i: number) => i?30:-30, duration: .7 }, 12.95)
+    .to('.atlas-game-copy', { autoAlpha: 0, duration: .3 }, 13.2)
+    .to('.atlas-cosmicspell', { autoAlpha: 0, duration: .25 }, 13.7)
+    .set('.atlas-brandeye', { autoAlpha: 1 }, 13.4)
+    .from('.brand-paper', { scale: .08, rotation: -45, duration: .85 }, 13.4)
+    .from('.brand-target', { scale: .3, rotation: 90, autoAlpha: 0, duration: .9 }, 13.65)
+    .from('.brand-kinetic-type>span', { xPercent: (i: number) => i?120:-120, duration: .8 }, 13.75)
+    .from('.atlas-brand-copy', { y: 50, autoAlpha: 0, duration: .6 }, 14.1)
+    .to('.brand-target', { rotation: -90, scale: 4, autoAlpha: 0, duration: .85 }, 15.25)
+    .to('.brand-kinetic-type>span', { yPercent: (i: number) => i?150:-150, duration: .65 }, 15.3)
+    .to('.atlas-brand-copy', { autoAlpha: 0, duration: .3 }, 15.4)
+    .to('.atlas-brandeye', { autoAlpha: 0, duration: .25 }, 16.0)
+    .set('.atlas-finale', { autoAlpha: 1 }, 15.85)
+    .from('.atlas-finale h2>span', { xPercent: (i: number) => i?110:-110, rotation: (i: number) => i?15:-15, stagger: .15, duration: .9 }, 15.85)
+    .from('.atlas-finale>a,.atlas-finale>span', { autoAlpha: 0, y: 30, duration: .5 }, 16.55)
     .to('.atlas-progress>span', { scaleX: 1, ease: 'none', duration: atlasDuration }, 0);
   syncLoops();
   document.addEventListener('visibilitychange', syncLoops);
