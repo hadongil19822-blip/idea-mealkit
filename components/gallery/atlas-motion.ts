@@ -110,11 +110,11 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
     .to('.atlas-semapage', { autoAlpha: 0, duration: .25 }, 11.15)
     .set('.atlas-hangulwave', { autoAlpha: 1 }, 12.95)
     .from('.atlas-hangulwave', { clipPath: 'inset(0% 50% 0% 50%)', duration: .65 }, 12.95)
-    .from('.hangul-kinetic-type>span', { yPercent: (i: number) => i%2?-160:160, rotation: (i: number) => i%2?45:-45, stagger: .08, duration: .85 }, 13.05)
-    .from('.language-frame', { yPercent: 170, rotation: (i: number) => i?25:-25, scale: .6, stagger: .12, duration: .9 }, 13.4)
+    .from('.hangul-kinetic-type>span', { yPercent: 40, autoAlpha: 0, stagger: .1, duration: .6, ease: 'power3.out' }, 13.1)
+    .from('.language-frame', { yPercent: 35, autoAlpha: 0, stagger: .1, duration: .6, ease: 'power3.out' }, 13.5)
     .from('.atlas-language-copy', { y: 70, autoAlpha: 0, duration: .55 }, 13.75)
-    .to('.hangul-kinetic-type>span', { xPercent: (i: number) => (i-1)*190, rotation: (i: number) => (i-1)*75, scale: 1.6, duration: .9 }, 14.6)
-    .to('.language-frame', { yPercent: -130, rotation: (i: number) => i?-20:20, stagger: .08, duration: .8 }, 14.75)
+    .to('.hangul-kinetic-type>span', { yPercent: -35, autoAlpha: 0, stagger: .06, duration: .5 }, 14.85)
+    .to('.language-frame', { yPercent: -25, autoAlpha: 0, stagger: .08, duration: .5 }, 14.9)
     .to('.atlas-language-copy', { autoAlpha: 0, duration: .3 }, 14.8)
     .to('.atlas-hangulwave', { autoAlpha: 0, duration: .25 }, 15.35)
     .set('.atlas-cosmicspell', { autoAlpha: 1 }, 17.15)
@@ -154,11 +154,11 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
     .to('.fold-panel', { rotation: 0, rotationY: 0, duration: .4 }, 7.75)
     .to('.fold-panel', { rotation: 90, scaleX: .015, scaleY: 2.8, yPercent: (i: number) => (i-1.5)*45, duration: .75, stagger: .05 }, 8.05);
   bridge('flow', 10.95);
-  timeline.from('.flow-rings>span', { scale: .05, rotation: (i: number) => i*90-180, duration: .95, stagger: .06 }, 11.1)
-    .from('.interlude-flow .interlude-word>span', { yPercent: (i: number) => i%2?130:-130, rotation: (i: number) => i%2?25:-25, duration: .85, stagger: .06 }, 11.25)
-    .to('.flow-rings', { rotation: -120, scaleX: 1.65, scaleY: .6, duration: .9 }, 11.9)
-    .to('.flow-rings', { scale: 6, rotation: -180, duration: .65 }, 12.65)
-    .to('.interlude-flow .interlude-word>span', { yPercent: (i: number) => i%2?-150:150, duration: .65, stagger: .04 }, 12.6);
+  timeline.from('.flow-rings>span', { scale: .65, autoAlpha: 0, rotation: (i: number) => i * 45 - 90, duration: .6, stagger: .06 }, 11.1)
+    .from('.flow-title', { yPercent: 45, autoAlpha: 0, duration: .55, ease: 'power3.out' }, 11.25)
+    .to('.flow-rings', { rotation: 100, duration: 1.15, ease: 'none' }, 11.65)
+    .to('.flow-rings', { scale: 1.3, autoAlpha: 0, duration: .45 }, 12.8)
+    .to('.flow-title', { yPercent: -25, autoAlpha: 0, duration: .4 }, 12.85);
   bridge('play', 15.15);
   timeline.from('.play-tiles>span', { scale: .01, rotationX: 90, rotation: (i: number) => i%2?45:-45, duration: .85, stagger: { each: .035, from: 'center' } }, 15.3)
     .from('.interlude-play .interlude-word>span', { yPercent: 150, rotation: 35, duration: .85, stagger: .09 }, 15.45)

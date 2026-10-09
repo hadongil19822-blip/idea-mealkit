@@ -14,7 +14,7 @@ function GraphicInterlude({ kind }: { kind: 'fold' | 'flow' | 'play' | 'connect'
   return <section className={`atlas-act atlas-interlude interlude-${kind}`} aria-hidden="true">
     <div className="interlude-caption"><span>IDEA MEALKIT / CREATIVE PROCESS</span><span>{captions[kind]}</span></div>
     {kind === 'fold' && <div className="fold-panels">{'FORM'.split('').map((c,i)=><div className="fold-panel" key={c} style={{left:`${i*25}%`}}><span>{c}</span><small>FROM IDEA TO REALITY</small></div>)}</div>}
-    {kind === 'flow' && <><div className="flow-rings">{[0,1,2,3].map(i=><span key={i} style={{inset:`${i*10}%`}} />)}</div><div className="interlude-word">{'FLOW'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
+    {kind === 'flow' && <><div className="flow-rings">{[0,1,2,3].map(i=><span key={i} style={{inset:`${i*10}%`}} />)}</div><div className="interlude-word"><span className="flow-title">FLOW</span></div></>}
     {kind === 'play' && <><div className="play-tiles">{Array.from({length:16},(_,i)=><span key={i} className={(Math.floor(i/4)+i)%2?'tile-light':'tile-dark'} />)}</div><div className="interlude-word">{'PLAY'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
     {kind === 'connect' && <><div className="connect-ribbons">{[0,1,2].map(i=><span key={i} />)}</div><div className="interlude-word">CONNECT</div></>}
     <span className="interlude-signature">THINK → DESIGN → DEVELOP</span>
@@ -81,7 +81,7 @@ export function MotionAtlas({ open }: Props) {
       <GraphicInterlude kind="flow" />
       <article className="atlas-act atlas-hangulwave" id="project-hangulwave" tabIndex={-1} aria-labelledby="atlas-hangul-title">
         <Label index={2} text="A LANGUAGE OPENS A WORLD" />
-        <div className="hangul-kinetic-type" aria-hidden="true"><span>안</span><span>녕</span><span>!</span></div>
+        <div className="hangul-kinetic-type" aria-hidden="true"><span>안</span><span>녕</span></div>
         <div className="language-frames"><figure className="language-frame language-frame-a"><img src="/projects/hangul-home.webp" alt="한글웨이브 홈과 학습 기능 전체 화면" /><figcaption>01 / YOUR DAILY RHYTHM</figcaption></figure><figure className="language-frame language-frame-b"><img src="/projects/hangul-choice.webp" alt="한글웨이브 이야기 선택 전체 화면" /><figcaption>02 / CHOOSE YOUR STORY</figcaption></figure></div>
         <div className="atlas-language-copy"><span>HANGULWAVE</span><h2 id="atlas-hangul-title">한 마디가,<br />새로운 세계로.</h2><p>선택하고, 듣고, 이야기하며<br />배우는 한국어.</p><Action index={2} open={open} /></div>
       </article>
