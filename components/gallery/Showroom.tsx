@@ -192,13 +192,33 @@ export default function Showroom() {
     if (!selected) return;
     const element = dialog.current!;
     const previousOverflow = document.body.style.overflow;
+    const previousScroll = window.scrollY;
     document.body.style.overflow = 'hidden';
     smoothScroll.current?.stop();
     element.showModal();
     const context = gsap.context(() => {
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) gsap.from('.project-dialog-content', { y: 65, opacity: 0, duration: 0.65, ease: 'power3.out' });
     }, element);
-    return () => { context.revert(); element.close(); document.body.style.overflow = previousOverflow; if (!document.hidden) smoothScroll.current?.start(); returnFocus.current?.focus({ preventScroll: true }); };
+    return () => {
+      context.revert();
+      element.close();
+      document.body.style.overflow = previousOverflow;
+      if (root.current?.isConnected) {
+        // Native dialog focus restoration can move a sticky scene across its exit.
+        // Restore the opened project to the middle of its reading area instead.
+        const project = document.getElementById(`project-${selected.id}`);
+        const top = project && root.current.dataset.motion === 'on'
+          ? sectionDestination(`#project-${selected.id}`, project)
+          : previousScroll;
+        if (smoothScroll.current) {
+          smoothScroll.current.resize();
+          smoothScroll.current.scrollTo(top, { immediate: true, force: true });
+        } else window.scrollTo({ top, behavior: 'auto' });
+        ScrollTrigger.refresh();
+        returnFocus.current?.focus({ preventScroll: true });
+      }
+      if (!document.hidden) smoothScroll.current?.start();
+    };
   }, [selected]);
 
   function navigateSection(event: React.MouseEvent<HTMLDivElement>) {
