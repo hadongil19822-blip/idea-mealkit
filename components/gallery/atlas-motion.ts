@@ -5,7 +5,7 @@ export const atlasStops: Record<string, number> = { projects: 2.7, metalook: 5.6
 export const atlasDuration = 25.2;
 
 /** One continuous timeline; loops own children, scroll owns their parent frames. */
-export function createAtlasMotion(root: HTMLElement) {
+export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: number) => void) {
   const $ = gsap.utils.selector(root);
   const acts = $('.atlas-act') as HTMLElement[];
   gsap.set(acts.slice(1), { autoAlpha: 0 });
@@ -71,8 +71,12 @@ export function createAtlasMotion(root: HTMLElement) {
     onUpdate: self => {
       const time = self.progress * atlasDuration;
       const next = time < 1.35 ? 0 : time < 4.55 ? 7 : time < 6.65 ? 1 : time < 8.65 ? -1 : time < 10.95 ? 2 : time < 13.05 ? -1 : time < 15.2 ? 3 : time < 17.35 ? -1 : time < 19.45 ? 4 : time < 21.45 ? -1 : time < 23.85 ? 5 : 6;
-      if (next !== active) { active = next; syncLoops(); }
-      controls.forEach((link, i) => link.setAttribute('aria-current', String(i + 1 === next)));
+      onProgress?.(self.progress);
+      if (next !== active) {
+        active = next;
+        syncLoops();
+        controls.forEach((link, i) => link.setAttribute('aria-current', String(i + 1 === next)));
+      }
     },
   } });
   timeline.to('.atlas-masthead', { yPercent: -110, scaleY: .35, duration: 1.05, ease: 'power2.in' }, 0)

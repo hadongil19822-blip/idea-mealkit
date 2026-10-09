@@ -14,6 +14,12 @@ import './motion-atlas.css';
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+// GSAP exposes these lifecycle hooks at runtime; its bundled types omit them.
+const mediaEvents = gsap as typeof gsap & {
+  addEventListener: (event: 'matchMediaInit' | 'matchMedia', callback: () => void) => void;
+  removeEventListener: (event: 'matchMediaInit' | 'matchMedia', callback: () => void) => void;
+};
+
 
 function sectionDestination(hash: string, element: HTMLElement) {
   if (hash === '#top') return 0;
@@ -37,6 +43,67 @@ export default function Showroom() {
     const media = gsap.matchMedia();
     let alive = true;
     let anchorFrame = 0;
+    let resizeFrame = 0;
+    let resizeSettled: ReturnType<typeof setTimeout> | undefined;
+    let lastSceneProgress = 0;
+    let lastContactOffset: number | null = null;
+    let measuredWidth = window.innerWidth;
+    let measuredHeight = window.innerHeight;
+    const rememberContactPosition = () => {
+      if (mediaPosition || window.innerWidth !== measuredWidth || window.innerHeight !== measuredHeight) return;
+      const top = document.getElementById('contact')!.getBoundingClientRect().top;
+      lastContactOffset = top < measuredHeight * .5 ? -top : null;
+    };
+    let mediaPosition: { progress: number; contactOffset: number | null } | undefined;
+    const settleViewport = () => {
+      clearTimeout(resizeSettled);
+      resizeSettled = setTimeout(() => {
+        if (!alive || mediaPosition) return;
+        measuredWidth = window.innerWidth;
+        measuredHeight = window.innerHeight;
+        rememberContactPosition();
+      }, 250);
+    };
+    const rememberProgress = (progress: number) => { if (!mediaPosition) lastSceneProgress = progress; };
+    // matchMedia temporarily removes the tall sticky stage. Preserve the scene before
+    // that layout collapse, then map it onto the new desktop/mobile scroll distance.
+    const beforeMediaChange = () => {
+      mediaPosition = { progress: lastSceneProgress, contactOffset: lastContactOffset };
+    };
+    const afterMediaChange = () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        if (!alive || !mediaPosition) return;
+        const position = mediaPosition;
+        const atlas = ScrollTrigger.getById('motion-atlas');
+        let top = 0;
+        if (position.contactOffset !== null) {
+          top = document.getElementById('contact')!.getBoundingClientRect().top + window.scrollY + position.contactOffset;
+        } else if (atlas) {
+          top = atlas.start + (atlas.end - atlas.start) * position.progress;
+        } else if (position.progress > .01) {
+          // Reduced motion has normal document flow; restore the nearest readable section.
+          const time = position.progress * atlasDuration;
+          const nearest = Object.entries(atlasStops).reduce((a, b) => Math.abs(b[1] - time) < Math.abs(a[1] - time) ? b : a);
+          const id = nearest[0] === 'projects' ? 'projects' : `project-${nearest[0]}`;
+          top = document.getElementById(id)!.getBoundingClientRect().top + window.scrollY - 64;
+        }
+        if (smoothScroll.current) {
+          smoothScroll.current.resize();
+          smoothScroll.current.scrollTo(top, { immediate: true });
+        } else window.scrollTo({ top, behavior: 'auto' });
+        lastSceneProgress = position.progress;
+        mediaPosition = undefined;
+        measuredWidth = window.innerWidth;
+        measuredHeight = window.innerHeight;
+        rememberContactPosition();
+        ScrollTrigger.update();
+      });
+    };
+    window.addEventListener('scroll', rememberContactPosition, { passive: true });
+    window.addEventListener('resize', settleViewport, { passive: true });
+    mediaEvents.addEventListener('matchMediaInit', beforeMediaChange);
+    mediaEvents.addEventListener('matchMedia', afterMediaChange);
     const previousRestoration = history.scrollRestoration;
     history.scrollRestoration = 'manual';
     const initialHash = initialSection.current;
@@ -59,7 +126,7 @@ export default function Showroom() {
           tick = (time: number) => lenis?.raf(time * 1000);
           lenis.on('scroll', ScrollTrigger.update);
           gsap.ticker.add(tick);
-          releaseMotion = createAtlasMotion(element);
+          releaseMotion = createAtlasMotion(element, rememberProgress);
           // A new drag or navigation key takes over from any wheel inertia.
           const releaseInertia = () => lenis?.scrollTo(window.scrollY, { immediate: true });
           const navigationKey = (event: KeyboardEvent) => {
@@ -73,7 +140,7 @@ export default function Showroom() {
             window.removeEventListener('pointerdown', releaseInertia);
             window.removeEventListener('keydown', navigationKey);
           };
-        } else releaseMotion = createAtlasMotion(element);
+        } else releaseMotion = createAtlasMotion(element, rememberProgress);
         const visibility = () => document.hidden ? lenis?.stop() : lenis?.start();
         document.addEventListener('visibilitychange', visibility);
         return () => {
@@ -107,7 +174,18 @@ export default function Showroom() {
       });
     });
     // Media use fixed aspect ratios, so lazy decoding does not change scroll geometry.
-    return () => { alive = false; cancelAnimationFrame(anchorFrame); history.scrollRestoration = previousRestoration; media.revert(); context.revert(); };
+    return () => {
+      alive = false;
+      cancelAnimationFrame(anchorFrame);
+      cancelAnimationFrame(resizeFrame);
+      clearTimeout(resizeSettled);
+      window.removeEventListener('scroll', rememberContactPosition);
+      window.removeEventListener('resize', settleViewport);
+      mediaEvents.removeEventListener('matchMediaInit', beforeMediaChange);
+      mediaEvents.removeEventListener('matchMedia', afterMediaChange);
+      history.scrollRestoration = previousRestoration;
+      media.revert(); context.revert();
+    };
   }, []);
 
   useEffect(() => {

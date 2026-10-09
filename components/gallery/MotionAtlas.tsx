@@ -12,12 +12,12 @@ function Label({ index, text }: { index: number; text: string }) {
 function GraphicInterlude({ kind }: { kind: 'fold' | 'flow' | 'play' | 'connect' }) {
   const captions = { fold: '상상을 형태로.', flow: '자연스럽게 이어지는 경험.', play: '작은 반응에서 시작되는 즐거움.', connect: '사람과 서비스를 연결합니다.' };
   return <section className={`atlas-act atlas-interlude interlude-${kind}`} aria-hidden="true">
-    <div className="interlude-caption"><span>IDEA MEALKIT / IN BETWEEN</span><span>{captions[kind]}</span></div>
+    <div className="interlude-caption"><span>IDEA MEALKIT / CREATIVE PROCESS</span><span>{captions[kind]}</span></div>
     {kind === 'fold' && <div className="fold-panels">{'FORM'.split('').map((c,i)=><div className="fold-panel" key={c} style={{left:`${i*25}%`}}><span>{c}</span><small>FROM IDEA TO REALITY</small></div>)}</div>}
     {kind === 'flow' && <><div className="flow-rings">{[0,1,2,3].map(i=><span key={i} style={{inset:`${i*10}%`}} />)}</div><div className="interlude-word">{'FLOW'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
     {kind === 'play' && <><div className="play-tiles">{Array.from({length:16},(_,i)=><span key={i} className={(Math.floor(i/4)+i)%2?'tile-light':'tile-dark'} />)}</div><div className="interlude-word">{'PLAY'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
     {kind === 'connect' && <><div className="connect-ribbons">{[0,1,2].map(i=><span key={i} />)}</div><div className="interlude-word">CONNECT</div></>}
-    <span className="interlude-signature">DESIGN IN MOTION — SCROLL TO SHAPE</span>
+    <span className="interlude-signature">THINK → DESIGN → DEVELOP</span>
   </section>;
 }
 export function MotionAtlas({ open }: Props) {
