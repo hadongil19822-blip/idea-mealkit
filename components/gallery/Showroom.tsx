@@ -7,7 +7,8 @@ import { type Project } from './projects';
 import { ProjectCover } from './ProjectCover';
 import { MealkitMark, ContactSection } from './StudioChrome';
 import { MotionAtlas } from './MotionAtlas';
-import { createAtlasMotion, atlasStops, atlasDuration } from './atlas-motion';
+import { createAtlasMotion } from './atlas-motion';
+import { atlasAnchors } from './atlas-scenes';
 import './showroom-shell.css';
 import './motion-atlas.css';
 
@@ -24,8 +25,8 @@ const mediaEvents = gsap as typeof gsap & {
 function sectionDestination(hash: string, element: HTMLElement) {
   if (hash === '#top') return 0;
   const atlas = ScrollTrigger.getById('motion-atlas');
-  const chapter = hash === '#projects' ? atlasStops.projects : atlasStops[hash.slice('#project-'.length)];
-  if (atlas && chapter !== undefined) return atlas.start + (atlas.end - atlas.start) * chapter / atlasDuration;
+  const chapter = hash === '#projects' ? atlasAnchors.projects : atlasAnchors[hash.slice('#project-'.length)];
+  if (atlas && chapter !== undefined) return atlas.start + (atlas.end - atlas.start) * chapter;
   return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 64 : 0);
 }
 
@@ -83,8 +84,7 @@ export default function Showroom() {
           top = atlas.start + (atlas.end - atlas.start) * position.progress;
         } else if (position.progress > .01) {
           // Reduced motion has normal document flow; restore the nearest readable section.
-          const time = position.progress * atlasDuration;
-          const nearest = Object.entries(atlasStops).reduce((a, b) => Math.abs(b[1] - time) < Math.abs(a[1] - time) ? b : a);
+          const nearest = Object.entries(atlasAnchors).reduce((a, b) => Math.abs(b[1] - position.progress) < Math.abs(a[1] - position.progress) ? b : a);
           const id = nearest[0] === 'projects' ? 'projects' : `project-${nearest[0]}`;
           top = document.getElementById(id)!.getBoundingClientRect().top + window.scrollY - 64;
         }

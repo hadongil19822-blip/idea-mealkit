@@ -2,8 +2,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { atlasScenes, atlasDuration, selectAtlasScene } from './atlas-scenes';
 
-export { atlasStops, atlasDuration } from './atlas-scenes';
-
 /** Scroll selects a scene; a time-based transition always completes its composition. */
 export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: number) => void) {
   const $ = gsap.utils.selector(root);
@@ -191,7 +189,9 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
       settleScene();
     } else {
       transition = timeline.tweenTo(target, {
-        duration: Math.min(1.25, Math.max(.65, distance * .45)),
+        // Finish project entrances promptly so the reading area isn't consumed
+        // while its button is still flying into place. Interludes keep their pace.
+        duration: Math.min(atlasScenes[next].isProject ? .7 : 1.1, Math.max(.45, distance * .4)),
         ease: 'none',
         onComplete: () => { transition = undefined; },
       });
