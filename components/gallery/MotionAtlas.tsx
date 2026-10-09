@@ -14,9 +14,26 @@ export function MotionAtlas({ open }: Props) {
     <div className="motion-screen">
       <section className="atlas-act atlas-cover" aria-labelledby="hero-title">
         <h1 className="sr-only" id="hero-title">IDEA MEALKIT — 생각이 형태가 되는 곳.</h1>
-        <MealkitMark word="IDEA" className="atlas-masthead" />
+        <div className="atlas-masthead" aria-label="IDEA MEALKIT"><MealkitMark word="IDEA" /><MealkitMark word="MEALKIT" /></div>
         <div className="atlas-cover-meta"><span>INDEPENDENT DIGITAL STUDIO</span><span>WEB / APP / AI</span><span>SEOUL, KR</span></div>
-        <div className="kinetic-engine" aria-hidden="true"><div className="kinetic-orbit">{['I','D','E','A'].map((letter, i) => <span className={`kinetic-glyph glyph-${i}`} key={letter}>{letter}</span>)}</div><span className="engine-coordinate coordinate-one">AN IDEA</span><span className="engine-coordinate coordinate-two">IN MOTION</span></div>
+        <div className="kinetic-engine" aria-hidden="true">
+          <div className="kit-piece kit-idea">
+            <div className="kit-surface idea-surface" />
+            <div className="kit-type-window"><div className="kit-type-track idea-track"><strong>IDEA</strong><strong>THINK</strong><strong>IDEA</strong></div></div>
+            <span className="kit-index">01 / THE SPARK</span>
+          </div>
+          <div className="kit-piece kit-meal">
+            <div className="kit-surface meal-surface"><span /><span /><span /><span /></div>
+            <div className="kit-type-window"><div className="kit-type-track meal-track"><strong>MEAL</strong><strong>MAKE</strong><strong>MEAL</strong></div></div>
+            <span className="kit-index">02 / THE PROCESS</span>
+          </div>
+          <div className="kit-piece kit-kit">
+            <div className="kit-surface kit-slice slice-a" /><div className="kit-surface kit-slice slice-b" />
+            <div className="kit-type-window"><div className="kit-type-track kit-track"><strong>KIT</strong><strong>PLAY</strong><strong>KIT</strong></div></div>
+            <span className="kit-index">03 / THE POSSIBILITY</span>
+          </div>
+          <div className="engine-baseline"><span>RAW IDEAS.</span><span>REAL POSSIBILITIES.</span><span>ASSEMBLED BY IDEA MEALKIT</span></div>
+        </div>
         <div className="atlas-cover-copy"><p>생각이<br /><i>형태가 되는 곳.</i></p><span>다섯 가지 아이디어,<br />다섯 개의 새로운 가능성.</span></div>
         <div className="atlas-cover-foot"><span>IDEA → EXPERIENCE</span><a href="#projects">SCROLL TO TRANSFORM ↓</a><span>(01—05)</span></div>
       </section>

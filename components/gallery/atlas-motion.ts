@@ -12,13 +12,23 @@ export function createAtlasMotion(root: HTMLElement) {
   gsap.set('.atlas-cover', { autoAlpha: 1 });
   gsap.from('.atlas-masthead path', { yPercent: 105, rotation: -8, stagger: .075, duration: 1.05, ease: 'power4.out' });
 
-  const glyphs = $('.kinetic-glyph');
-  gsap.set(glyphs, { x: 0, y: 0, xPercent: (i: number) => i % 2 ? 55 : -55, yPercent: (i: number) => i < 2 ? -50 : 50 });
-  const identityLoop = gsap.timeline({ repeat: -1, paused: true, defaults: { duration: 1.4, ease: 'expo.inOut' } })
-    .to(glyphs, { rotation: (i: number) => i % 2 ? 90 : -90, xPercent: (i: number) => i < 2 ? 55 : -55, yPercent: (i: number) => i % 2 ? 50 : -50, stagger: .06 }, .6)
-    .to(glyphs, { rotation: 0, xPercent: (i: number) => (i - 1.5) * 88, yPercent: 0, scale: .7, stagger: .05 }, 2.7)
-    .to(glyphs, { rotation: (i: number) => i % 2 ? -180 : 180, scale: .45, xPercent: (i: number) => (i % 2 ? 1 : -1) * 38, yPercent: (i: number) => (i < 2 ? -1 : 1) * 38 }, 4.8)
-    .to(glyphs, { rotation: 0, scale: 1, xPercent: (i: number) => i % 2 ? 55 : -55, yPercent: (i: number) => i < 2 ? -50 : 50, stagger: .06 }, 6.7);
+  // Reset the loop's local transforms when matchMedia rebuilds after a resize.
+  gsap.set('.kit-type-track,.idea-surface,.meal-surface>span,.kit-slice', { clearProps: 'transform' });
+  gsap.set('.kit-type-track', { x: 0, y: 0, xPercent: 0, yPercent: 0 });
+  // Separate surfaces from type: shapes can turn while the words remain legible.
+  const identityLoop = gsap.timeline({ repeat: -1, repeatDelay: .55, paused: true, defaults: { duration: 1.2, ease: 'expo.inOut' } })
+    .to('.idea-surface', { borderRadius: '8%', rotation: 90, scale: .86 }, .7)
+    .to('.meal-surface>span', { rotation: (i: number) => i % 2 ? -18 : 18, scaleY: .77, xPercent: (i: number) => (i - 1.5) * 12, stagger: .065 }, .7)
+    .to('.slice-a', { xPercent: -13, yPercent: -13 }, .7)
+    .to('.slice-b', { xPercent: 13, yPercent: 13 }, .7)
+    .to('.kit-type-track', { yPercent: -100 / 3, stagger: .12 }, .85)
+    .to('.idea-surface', { rotation: 135, borderRadius: '0%', scale: .7 }, 2.7)
+    .to('.meal-surface>span', { rotation: 0, scaleY: 1, xPercent: 0, stagger: .065 }, 2.7)
+    .to('.kit-slice', { rotation: 90, xPercent: 0, yPercent: 0, scale: .83 }, 2.7)
+    .to('.kit-type-track', { yPercent: -200 / 3, stagger: .12 }, 2.85)
+    .to('.idea-surface', { borderRadius: '50%', rotation: 180, scale: 1 }, 4.7)
+    .to('.kit-slice', { rotation: 0, scale: 1 }, 4.7)
+    .set('.kit-type-track', { yPercent: 0 }, 6);
   const fashionLoop = gsap.to('.fashion-kinetic-line', { xPercent: -50, duration: 11, ease: 'none', repeat: -1, paused: true });
   const flightLoop = gsap.timeline({ repeat: -1, paused: true }).fromTo('.cosmic-flight>span', { scale: .18, rotation: -25, opacity: 0 }, { keyframes: [{ opacity: .8, duration: .35 }, { scale: 3.5, rotation: 20, opacity: 0, duration: 3.3 }], stagger: .65, ease: 'none' });
   const scanLoop = gsap.fromTo('.brand-scanner', { y: 0, opacity: 0 }, { y: () => (root.querySelector('.brand-target') as HTMLElement).offsetHeight * .8, opacity: .65, duration: 2.5, repeat: -1, yoyo: true, ease: 'power1.inOut', paused: true });
@@ -38,7 +48,7 @@ export function createAtlasMotion(root: HTMLElement) {
   } });
   timeline.to('.atlas-masthead', { yPercent: -110, scaleY: .35, duration: 1.05, ease: 'power2.in' }, 0)
     .to('.atlas-cover-meta,.atlas-cover-copy,.atlas-cover-foot', { autoAlpha: 0, y: -35, duration: .55 }, .1)
-    .to('.kinetic-engine', { scale: 4.5, rotation: -90, duration: 1.4, ease: 'power2.in' }, 0)
+    .to('.kinetic-engine', { scale: 4.5, rotation: -35, duration: 1.4, ease: 'power2.in' }, 0)
     .to('.atlas-cover', { autoAlpha: 0, duration: .15 }, 1.4)
     .set('.atlas-metalook', { autoAlpha: 1 }, 1.1)
     .fromTo('.fashion-aperture', { scale: .06, rotation: 90, clipPath: 'inset(0% round 35%)' }, { scale: 1, rotation: 0, clipPath: 'inset(0% round 0%)', duration: 1.05 }, 1.1)
