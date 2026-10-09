@@ -1,10 +1,10 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { atlasScenes, atlasDuration, selectAtlasScene } from './atlas-scenes';
 
-export const atlasStops: Record<string, number> = { projects: 2.7, metalook: 5.65, semapage: 10.1, hangulwave: 14.25, cosmicspell: 18.45, brandeye: 22.75 };
-export const atlasDuration = 25.2;
+export { atlasStops, atlasDuration } from './atlas-scenes';
 
-/** One continuous timeline; loops own children, scroll owns their parent frames. */
+/** Scroll selects a scene; a time-based transition always completes its composition. */
 export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: number) => void) {
   const $ = gsap.utils.selector(root);
   const acts = $('.atlas-act') as HTMLElement[];
@@ -66,19 +66,17 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
   const syncLoops = () => loops.forEach((loop, i) => { if (!loop) return; if (!document.hidden && root.dataset.motionPaused !== 'true' && root.dataset.dialogOpen !== 'true' && i === active) loop.resume(); else loop.pause(); });
   const controls = $('.atlas-chapters a') as HTMLAnchorElement[];
   controls.forEach(link => link.setAttribute('aria-current', 'false'));
-  const timeline = gsap.timeline({ defaults: { ease: 'power2.inOut' }, scrollTrigger: {
-    id: 'motion-atlas', trigger: '.motion-experience', start: 'top top', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true,
-    onUpdate: self => {
-      const time = self.progress * atlasDuration;
+  const timeline = gsap.timeline({ paused: true, defaults: { ease: 'power2.inOut' },
+    onUpdate: () => {
+      const time = timeline.time();
       const next = time < 1.35 ? 0 : time < 4.55 ? 7 : time < 6.65 ? 1 : time < 8.65 ? -1 : time < 10.95 ? 2 : time < 13.05 ? -1 : time < 15.2 ? 3 : time < 17.35 ? -1 : time < 19.45 ? 4 : time < 21.45 ? -1 : time < 23.85 ? 5 : 6;
-      onProgress?.(self.progress);
       if (next !== active) {
         active = next;
         syncLoops();
         controls.forEach((link, i) => link.setAttribute('aria-current', String(i + 1 === next)));
       }
     },
-  } });
+  });
   timeline.to('.atlas-masthead', { yPercent: -110, scaleY: .35, duration: 1.05, ease: 'power2.in' }, 0)
     .to('.atlas-cover-meta,.atlas-cover-copy,.atlas-cover-foot', { autoAlpha: 0, y: -35, duration: .55 }, .1)
     .to('.kinetic-engine', { scale: 4.5, rotation: -35, duration: 1.4, ease: 'power2.in' }, 0)
@@ -139,8 +137,7 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
     .from('.atlas-finale h2>span', { xPercent: (i: number) => i?110:-110, rotation: (i: number) => i?15:-15, stagger: .15, duration: .9 }, 23.85)
     .from('.atlas-finale>a,.atlas-finale>span', { autoAlpha: 0, y: 30, duration: .5 }, 24.55)
     .to('.atlas-progress>span', { scaleX: 1, ease: 'none', duration: atlasDuration }, 0);
-  // Four graphic interludes live between projects, each driven directly by scroll.
-  // No new pins or scrolling containers: the existing stage owns the complete journey.
+  // Interludes have their own complete resting poses, just like project scenes.
   const bridge = (name: string, at: number) => {
     const scene = `.interlude-${name}`;
     timeline.set(scene, { autoAlpha: 1 }, at)
@@ -151,29 +148,68 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
   };
   bridge('fold', 6.55);
   timeline.from('.fold-panel', { rotationY: 85, rotation: (i: number) => (i - 1.5) * 28, yPercent: (i: number) => i % 2 ? 120 : -120, duration: .95, stagger: .075 }, 6.7)
-    .to('.fold-panel', { rotation: 0, rotationY: 0, duration: .4 }, 7.75)
+    .to('.fold-panel', { rotation: 0, rotationY: 0, duration: .2 }, 7.8)
     .to('.fold-panel', { rotation: 90, scaleX: .015, scaleY: 2.8, yPercent: (i: number) => (i-1.5)*45, duration: .75, stagger: .05 }, 8.05);
   bridge('flow', 10.95);
   timeline.from('.flow-rings>span', { scale: .65, autoAlpha: 0, rotation: (i: number) => i * 45 - 90, duration: .6, stagger: .06 }, 11.1)
     .from('.flow-title', { yPercent: 45, autoAlpha: 0, duration: .55, ease: 'power3.out' }, 11.25)
-    .to('.flow-rings', { rotation: 100, duration: 1.15, ease: 'none' }, 11.65)
+    .to('.flow-rings', { rotation: 100, duration: .85, ease: 'power2.inOut' }, 11.65)
     .to('.flow-rings', { scale: 1.3, autoAlpha: 0, duration: .45 }, 12.8)
     .to('.flow-title', { yPercent: -25, autoAlpha: 0, duration: .4 }, 12.85);
   bridge('play', 15.15);
-  timeline.from('.play-tiles>span', { scale: .01, rotationX: 90, rotation: (i: number) => i%2?45:-45, duration: .85, stagger: { each: .035, from: 'center' } }, 15.3)
+  timeline.from('.play-tiles>span', { scale: .01, rotationX: 90, rotation: (i: number) => i%2?45:-45, duration: .75, stagger: { each: .035, from: 'center' } }, 15.3)
     .from('.interlude-play .interlude-word>span', { yPercent: 150, rotation: 35, duration: .85, stagger: .09 }, 15.45)
-    .to('.play-tiles', { rotation: 45, scale: .88, duration: .7 }, 16.2)
+    .to('.play-tiles', { rotation: 45, scale: .88, duration: .45 }, 16.2)
     .to('.play-tiles>span', { xPercent: (i: number) => (i%4-1.5)*180, yPercent: (i: number) => (Math.floor(i/4)-1.5)*180, rotation: 90, scale: .1, borderRadius: '50%', duration: .8, stagger: .018 }, 16.7)
     .to('.interlude-play .interlude-word', { scale: 2, autoAlpha: 0, duration: .6 }, 16.8);
   bridge('connect', 19.4);
   timeline.from('.connect-ribbons>span', { xPercent: (i: number) => i%2?120:-120, rotation: (i: number) => i%2?-35:35, duration: .95, stagger: .08 }, 19.55)
     .from('.interlude-connect .interlude-word', { scaleX: .05, autoAlpha: 0, duration: .8 }, 19.8)
-    .to('.connect-ribbons>span', { rotation: (i: number) => (i-1)*25, scaleX: .8, duration: .75, stagger: .06 }, 20.5)
+    .to('.connect-ribbons>span', { rotation: (i: number) => (i-1)*25, scaleX: .8, duration: .3, stagger: .06 }, 20.5)
     .to('.connect-ribbons>span', { rotation: 0, scaleX: 1.4, scaleY: 4, duration: .7, stagger: .04 }, 21.05)
     .to('.interlude-connect .interlude-word', { autoAlpha: 0, scale: .7, duration: .5 }, 21.1);
-  syncLoops();
-  document.addEventListener('visibilitychange', syncLoops);
-  const pauseObserver = new MutationObserver(syncLoops);
+  let selectedScene = 0;
+  let transition: gsap.core.Tween | undefined;
+  const motionDisabled = () => document.hidden || root.dataset.motionPaused === 'true' || root.dataset.dialogOpen === 'true';
+  const settleScene = () => {
+    transition?.kill();
+    transition = undefined;
+    timeline.time(atlasScenes[selectedScene].time, false);
+  };
+  const selectScene = (progress: number, immediate = false) => {
+    onProgress?.(progress);
+    const next = selectAtlasScene(progress, selectedScene);
+    if (next === selectedScene && !immediate) return;
+    const previous = selectedScene;
+    selectedScene = next;
+    transition?.kill();
+    const target = atlasScenes[next].time;
+    const distance = Math.abs(target - timeline.time());
+    // Native scrollbar drags, deep links and fast flings skip obsolete scenes.
+    // Never queue animations or move the user's scroll position to finish one.
+    if (immediate || motionDisabled() || Math.abs(next - previous) > 1 || distance > 4) {
+      settleScene();
+    } else {
+      transition = timeline.tweenTo(target, {
+        duration: Math.min(1.25, Math.max(.65, distance * .45)),
+        ease: 'none',
+        onComplete: () => { transition = undefined; },
+      });
+    }
+  };
+  const trigger = ScrollTrigger.create({
+    id: 'motion-atlas', trigger: root.querySelector('.motion-experience'),
+    start: 'top top', end: 'bottom bottom',
+    onUpdate: self => selectScene(self.progress),
+    onRefresh: self => selectScene(self.progress, true),
+  });
+  const syncMotion = () => {
+    if (motionDisabled()) settleScene();
+    syncLoops();
+  };
+  syncMotion();
+  document.addEventListener('visibilitychange', syncMotion);
+  const pauseObserver = new MutationObserver(syncMotion);
   pauseObserver.observe(root, { attributes: true, attributeFilter: ['data-motion-paused', 'data-dialog-open'] });
-  return () => { pauseObserver.disconnect(); document.removeEventListener('visibilitychange', syncLoops); loops.forEach(loop=>loop?.kill()); timeline.kill(); };
+  return () => { pauseObserver.disconnect(); document.removeEventListener('visibilitychange', syncMotion); transition?.kill(); trigger.kill(); loops.forEach(loop=>loop?.kill()); timeline.kill(); };
 }
