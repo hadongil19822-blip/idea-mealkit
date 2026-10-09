@@ -17,6 +17,16 @@ import './experience-v2.css';
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+
+function sectionDestination(hash: string, element: HTMLElement) {
+  const trigger = ScrollTrigger.getById('project-sequence');
+  const chapterTime = chapterStops[hash.slice('#project-'.length)];
+  if (hash === '#top') return 0;
+  if (trigger && hash.startsWith('#project-') && chapterTime !== undefined) return trigger.start + (trigger.end - trigger.start) * chapterTime / trigger.animation!.duration();
+  if (trigger && hash === '#projects') return trigger.start;
+  return element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 108 : 0);
+}
+
 export default function Showroom() {
   const root = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -24,11 +34,19 @@ export default function Showroom() {
   const [notes, setNotes] = useState(false);
   const [selected, setSelected] = useState<Project | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const initialSection = useRef(location.hash || '#top');
 
   useEffect(() => {
     let lenis: Lenis | undefined;
     const media = gsap.matchMedia();
     let alive = true;
+    let anchorFrame = 0;
+    const previousRestoration = history.scrollRestoration;
+    history.scrollRestoration = 'manual';
+    const initialHash = initialSection.current;
+    // Suppress the browser's own anchor jump while pin spacers are being built.
+    history.replaceState(null, '', location.pathname + location.search);
+    window.scrollTo({ top: 0, behavior: 'auto' });
     const context = gsap.context(() => {
       media.add({ desktop: '(min-width:768px)', mobile: '(max-width:767px)', reduced: '(prefers-reduced-motion: reduce)' }, condition => {
         const { desktop, reduced } = condition.conditions!;
@@ -57,10 +75,28 @@ export default function Showroom() {
       media.add('(min-width:768px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => installPointerDepth(root.current!));
     }, root);
     const refresh = () => { if (alive) ScrollTrigger.refresh(); };
-    document.fonts.ready.then(refresh);
+    document.fonts.ready.then(() => {
+      if (!alive) return;
+      // Let generated pin spacers enter layout before Lenis measures its limit.
+      anchorFrame = requestAnimationFrame(() => {
+        anchorFrame = requestAnimationFrame(() => {
+          if (!alive) return;
+          refresh();
+          const hash = location.hash || initialHash;
+          const target = document.getElementById(hash.slice(1));
+          if (!target || (!['#top', '#projects', '#contact'].includes(hash) && !hash.startsWith('#project-'))) return;
+          const top = sectionDestination(hash, target);
+          history.replaceState(null, '', hash);
+          if (smoothScroll.current) {
+            smoothScroll.current.resize();
+            smoothScroll.current.scrollTo(top, { immediate: true });
+          } else window.scrollTo({ top, behavior: 'auto' });
+        });
+      });
+    });
     const images = Array.from(root.current!.querySelectorAll('img'));
     images.forEach(image => image.addEventListener('load', refresh));
-    return () => { alive = false; images.forEach(image => image.removeEventListener('load', refresh)); media.revert(); context.revert(); };
+    return () => { alive = false; cancelAnimationFrame(anchorFrame); history.scrollRestoration = previousRestoration; images.forEach(image => image.removeEventListener('load', refresh)); media.revert(); context.revert(); };
   }, []);
 
   useEffect(() => {
@@ -85,11 +121,7 @@ export default function Showroom() {
     const element = document.getElementById(hash.slice(1));
     if (!element) return;
     event.preventDefault();
-    // A pinned element's DOM position changes as it scrolls; use the trigger's start.
-    const trigger = ScrollTrigger.getById('project-sequence');
-    const chapterTime = chapterStops[hash.slice('#project-'.length)];
-    const pinnedChapter = hash.startsWith('#project-') && trigger && chapterTime !== undefined;
-    const destination = hash === '#top' ? 0 : pinnedChapter ? trigger.start + (trigger.end - trigger.start) * chapterTime / trigger.animation!.duration() : hash === '#projects' && trigger ? trigger.start : element.getBoundingClientRect().top + window.scrollY - (hash.startsWith('#project-') ? 108 : 0);
+    const destination = sectionDestination(hash, element);
     const focusTarget = () => element.focus({ preventScroll: true });
     history.replaceState(null, '', hash);
     if (smoothScroll.current) smoothScroll.current.scrollTo(destination, { onComplete: focusTarget });
