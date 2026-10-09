@@ -1,0 +1,31 @@
+/* Depth belongs to the posters; app screenshots retain their full frame. */
+.opening-composition{perspective:1200px}
+.opening-portrait{box-shadow:7px 8px 0 #e8e8df20,14px 16px 0 #e8e8df0d;transform-style:preserve-3d}
+.opening-wide{perspective:1000px;transform-style:preserve-3d}
+.opening-wide>div{backface-visibility:hidden}
+.horizontal-specimen{perspective:1100px}
+.horizontal-specimen>div{backface-visibility:hidden}
+.type-line{display:block;overflow:clip;padding-bottom:.06em;margin-bottom:-.06em}
+.type-line>span{display:block;transform-origin:left bottom}
+.sema-image-fragments{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));height:100%;min-height:0;min-width:0;perspective:600px;filter:grayscale(.9)}
+.sema-image-fragments>span{display:block;background-image:url('/projects/semapage.jpg');background-size:400% 200%;background-repeat:no-repeat;min-width:0;min-height:0}
+.brand-focus-frame{position:absolute;inset:23% 11%;border:1px solid #30352e66;pointer-events:none}
+.brand-focus-frame:before,.brand-focus-frame:after{content:'';position:absolute;width:8px;height:8px;border:2px solid #535b49}
+.brand-focus-frame:before{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.brand-focus-frame:after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+.brand-scan-beam{position:absolute;top:12%;left:9%;right:9%;height:1px;background:#727d60;box-shadow:0 -8px 16px 3px #9ba98a25;pointer-events:none;z-index:3;opacity:0}
+.brand-disc-content h3 .type-line{padding-bottom:.12em;margin-bottom:-.12em}
+.cosmic-gates{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;overflow:clip}
+.cosmic-gates>span{position:absolute;width:100%;height:92%;border:1px solid #deded8;opacity:0;transform-origin:center}
+.contact-method strong>span{transition:transform .3s ease}
+.contact-method:hover strong>span,.contact-method:focus-visible strong>span{transform:translate(3px,-3px)}
+@media(max-width:600px){
+  .opening-portrait{box-shadow:4px 5px 0 #e8e8df20,8px 10px 0 #e8e8df0d}
+  .cosmic-gates>span{width:115%;height:82%}
+  .brand-focus-frame{inset:24% 7%}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-focus-frame,.brand-scan-beam,.cosmic-gates{display:none}
+  .opening-composition,.opening-wide,.horizontal-specimen,.sema-image-fragments{perspective:none}
+  .contact-method strong>span{transform:none!important}
+}

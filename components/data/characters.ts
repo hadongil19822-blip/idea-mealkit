@@ -1,7 +1,6 @@
 
-import type { CharacterMasterData } from '../types';
 
-export const characterData: Omit<CharacterMasterData, 'currentLocation' | 'status'>[] = [
+export const characterData = [
     {
         "isPremium": false,
         "description": "#긍정파워 #운동메이트 #인싸",

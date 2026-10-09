@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 import { Check, Link, Handshake, Code2, MonitorSmartphone, Download } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import html2canvas from 'html2canvas';
 
-const fadeUp = {
+const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
