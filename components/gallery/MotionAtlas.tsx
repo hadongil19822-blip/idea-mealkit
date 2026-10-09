@@ -9,6 +9,17 @@ function Action({ index, open }: Props & { index: number }) {
 function Label({ index, text }: { index: number; text: string }) {
   return <div className="atlas-label"><span>0{index + 1} / {projects[index].name}</span><span>{text}</span></div>;
 }
+function GraphicInterlude({ kind }: { kind: 'fold' | 'flow' | 'play' | 'connect' }) {
+  const captions = { fold: '상상을 형태로.', flow: '자연스럽게 이어지는 경험.', play: '작은 반응에서 시작되는 즐거움.', connect: '사람과 서비스를 연결합니다.' };
+  return <section className={`atlas-act atlas-interlude interlude-${kind}`} aria-hidden="true">
+    <div className="interlude-caption"><span>IDEA MEALKIT / IN BETWEEN</span><span>{captions[kind]}</span></div>
+    {kind === 'fold' && <div className="fold-panels">{'FORM'.split('').map((c,i)=><div className="fold-panel" key={c} style={{left:`${i*25}%`}}><span>{c}</span><small>FROM IDEA TO REALITY</small></div>)}</div>}
+    {kind === 'flow' && <><div className="flow-rings">{[0,1,2,3].map(i=><span key={i} style={{inset:`${i*10}%`}} />)}</div><div className="interlude-word">{'FLOW'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
+    {kind === 'play' && <><div className="play-tiles">{Array.from({length:16},(_,i)=><span key={i} className={(Math.floor(i/4)+i)%2?'tile-light':'tile-dark'} />)}</div><div className="interlude-word">{'PLAY'.split('').map(c=><span key={c}>{c}</span>)}</div></>}
+    {kind === 'connect' && <><div className="connect-ribbons">{[0,1,2].map(i=><span key={i} />)}</div><div className="interlude-word">CONNECT</div></>}
+    <span className="interlude-signature">DESIGN IN MOTION — SCROLL TO SHAPE</span>
+  </section>;
+}
 export function MotionAtlas({ open }: Props) {
   return <section className="motion-experience" id="top" tabIndex={-1} aria-label="IDEA MEALKIT 모션 쇼케이스">
     <div className="motion-screen">
@@ -57,6 +68,7 @@ export function MotionAtlas({ open }: Props) {
         <div className="fashion-kinetic-line" aria-hidden="true"><span>METALOOK — </span><span>METALOOK — </span></div>
         <Label index={0} text="IMAGINATION, UNFOLDED." />
       </article>
+      <GraphicInterlude kind="fold" />
       <article className="atlas-act atlas-semapage" id="project-semapage" tabIndex={-1} aria-labelledby="atlas-sema-title">
         <Label index={1} text="PIXELS BECOME POSSIBILITIES" />
         <div className="pixel-assembly" aria-hidden="true">{Array.from({length:6},(_,i)=><span key={i} style={{backgroundPosition:`${i%3*50}% ${Math.floor(i/3)*100}%`}} />)}</div>
@@ -66,12 +78,14 @@ export function MotionAtlas({ open }: Props) {
           <div className="html-ribbon ribbon-output"><span>OUTPUT / 03</span><strong>&lt;html&gt;</strong><Action index={1} open={open} /></div>
         </div>
       </article>
+      <GraphicInterlude kind="flow" />
       <article className="atlas-act atlas-hangulwave" id="project-hangulwave" tabIndex={-1} aria-labelledby="atlas-hangul-title">
         <Label index={2} text="A LANGUAGE OPENS A WORLD" />
         <div className="hangul-kinetic-type" aria-hidden="true"><span>안</span><span>녕</span><span>!</span></div>
         <div className="language-frames"><figure className="language-frame language-frame-a"><img src="/projects/hangul-home.webp" alt="한글웨이브 홈과 학습 기능 전체 화면" /><figcaption>01 / YOUR DAILY RHYTHM</figcaption></figure><figure className="language-frame language-frame-b"><img src="/projects/hangul-choice.webp" alt="한글웨이브 이야기 선택 전체 화면" /><figcaption>02 / CHOOSE YOUR STORY</figcaption></figure></div>
         <div className="atlas-language-copy"><span>HANGULWAVE</span><h2 id="atlas-hangul-title">한 마디가,<br />새로운 세계로.</h2><p>선택하고, 듣고, 이야기하며<br />배우는 한국어.</p><Action index={2} open={open} /></div>
       </article>
+      <GraphicInterlude kind="play" />
       <article className="atlas-act atlas-cosmicspell" id="project-cosmicspell" tabIndex={-1} aria-labelledby="atlas-cosmic-title">
         <div className="cosmic-flight" aria-hidden="true">{Array.from({length:5},(_,i)=><span key={i} />)}</div>
         <Label index={3} text="ONE MORE RUN. ONE MORE WORLD." />
@@ -80,6 +94,7 @@ export function MotionAtlas({ open }: Props) {
         <img className="atlas-game-shot game-b" src="/projects/cosmic-boss.webp" alt="코스믹 스펠 서바이버 보스 전투 전체 화면" />
         <div className="atlas-game-copy"><h2 id="atlas-cosmic-title">COSMIC SPELL<br />SURVIVORS</h2><p>기체와 무기를 조합해,<br />우주 끝까지 살아남기.</p><Action index={3} open={open} /></div>
       </article>
+      <GraphicInterlude kind="connect" />
       <article className="atlas-act atlas-brandeye" id="project-brandeye" tabIndex={-1} aria-labelledby="atlas-brand-title">
         <div className="brand-paper" aria-hidden="true" />
         <Label index={4} text="MAKE YOUR BRAND VISIBLE" />
