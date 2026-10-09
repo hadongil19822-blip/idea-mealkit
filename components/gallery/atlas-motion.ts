@@ -9,7 +9,7 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
   gsap.set(acts.slice(1), { autoAlpha: 0 });
   gsap.set('.atlas-cover', { autoAlpha: 1 });
   gsap.set('.atlas-chapters', { autoAlpha: 0 });
-  gsap.from('.atlas-masthead path', { yPercent: 105, rotation: -8, stagger: .075, duration: 1.05, ease: 'power4.out' });
+  gsap.from('.atlas-masthead path', { yPercent: 105, rotation: -8, stagger: .1, duration: 1.5, ease: 'power4.out' });
 
   // Reset the loop's local transforms when matchMedia rebuilds after a resize.
   gsap.set('.kit-type-track,.idea-surface,.meal-surface>span,.kit-slice', { clearProps: 'transform' });
@@ -61,6 +61,8 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
     .to('.studio-web .studio-word>span', { yPercent: 0, rotation: 0, autoAlpha: 1, duration: 1, stagger: .05 }, 9.75);
   let active = 0;
   const loops = [identityLoop, fashionLoop, null, null, flightLoop, scanLoop, null, studioLoop];
+  // Keep the choreography intact while giving recurring shapes and type more time.
+  loops.forEach(loop => loop?.timeScale(.75));
   const syncLoops = () => loops.forEach((loop, i) => { if (!loop) return; if (!document.hidden && root.dataset.motionPaused !== 'true' && root.dataset.dialogOpen !== 'true' && i === active) loop.resume(); else loop.pause(); });
   const controls = $('.atlas-chapters a') as HTMLAnchorElement[];
   controls.forEach(link => link.setAttribute('aria-current', 'false'));
@@ -189,9 +191,9 @@ export function createAtlasMotion(root: HTMLElement, onProgress?: (progress: num
       settleScene();
     } else {
       transition = timeline.tweenTo(target, {
-        // Finish project entrances promptly so the reading area isn't consumed
-        // while its button is still flying into place. Interludes keep their pace.
-        duration: Math.min(atlasScenes[next].isProject ? .7 : 1.1, Math.max(.45, distance * .4)),
+        // Let the full exit/entrance choreography breathe. Scroll reading ranges
+        // stay independent, and a new destination still replaces the current tween.
+        duration: Math.min(atlasScenes[next].isProject ? 1.65 : 2, Math.max(.8, distance * .75)),
         ease: 'none',
         onComplete: () => { transition = undefined; },
       });
