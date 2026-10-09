@@ -10,7 +10,8 @@ export function createReferenceMotion() {
   gsap.set('.floating-info', { autoAlpha: 0 });
   gsap.to('.floating-info', { autoAlpha: 1, duration: .25, scrollTrigger: { trigger: '.reference-hero', start: 'top -180px', toggleActions: 'play none none reverse' } });
 
-  const opening = gsap.timeline({ scrollTrigger: { id: 'opening', trigger: '.reference-hero', start: 'top top', end: '+=220%', pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1 } });
+  // Lenis smooths wheel input once; scrub stays direct for native scrollbar drags.
+  const opening = gsap.timeline({ scrollTrigger: { id: 'opening', trigger: '.reference-hero', start: 'top top', end: '+=220%', pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1 } });
   opening.to('.reference-masthead', { yPercent: -28, opacity: .12, duration: .8, ease: 'none' }, 0)
     .to('.reference-masthead .reference-info', { autoAlpha: 0, duration: .3 }, 0)
     .to('.hero-statement', { xPercent: -28, yPercent: -35, opacity: 0, duration: .9, ease: 'none' }, 0)
@@ -27,7 +28,7 @@ export function createReferenceMotion() {
 
   gsap.set('.project-scene:not(.scene-hangul)', { autoAlpha: 0 });
   gsap.set('.brand-disc', { x: 0, y: 0, xPercent: -50, yPercent: -50 });
-  const sequence = gsap.timeline({ scrollTrigger: { id: 'project-sequence', trigger: '.project-sequence', start: 'top top', end: '+=800%', pin: true, scrub: .55, anticipatePin: 1, invalidateOnRefresh: true } });
+  const sequence = gsap.timeline({ scrollTrigger: { id: 'project-sequence', trigger: '.project-sequence', start: 'top top', end: '+=800%', pin: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true } });
   sequence.from('.vertical-specimen', { y: 180, rotation: -10, scale: .52, duration: 1.25, ease: 'power3.out' }, 0)
     .from('.scene-huge-type .type-line>span', { yPercent: 115, rotation: 5, stagger: .15, duration: 1, ease: 'power3.out' }, .1)
     .from('.vertical-columns', { clipPath: 'inset(0% 0% 100% 0%)', duration: .9, ease: 'power2.out' }, .25)
@@ -77,7 +78,7 @@ export function createReferenceMotion() {
   });
   sequence.fromTo('.sequence-progress>span', { scaleX: 0 }, { scaleX: 1, duration: 14.6, ease: 'none' }, 0);
 
-  const closing = gsap.timeline({ scrollTrigger: { id: 'closing', trigger: '.closing-sequence', start: 'top top', end: '+=170%', pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1 } });
+  const closing = gsap.timeline({ scrollTrigger: { id: 'closing', trigger: '.closing-sequence', start: 'top top', end: '+=170%', pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1 } });
   closing.from('.closing-letter', { y: (i: number) => (i % 3 - 1) * 140, x: (i: number) => (i % 4 - 1.5) * 60, rotation: (i: number) => (i % 2 ? 1 : -1) * 55, stagger: .045, duration: 1.2, ease: 'power3.out' }, 0)
     .from('.closing-poster-content', { y: 100, opacity: 0, duration: .9 }, .3)
     .to('.closing-poster', { scale: .44, xPercent: 24, rotation: -9, duration: 1.3, ease: 'power2.inOut' }, 1.7)

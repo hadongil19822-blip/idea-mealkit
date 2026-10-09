@@ -55,18 +55,33 @@ export default function Showroom() {
         if (reduced) return () => { delete element.dataset.layout; };
         element.dataset.motion = 'on';
         let tick: ((time: number) => void) | undefined;
+        let releaseNativeInput: (() => void) | undefined;
         if (desktop) {
-          lenis = new Lenis({ duration: 1.05, autoRaf: false, anchors: false });
+          lenis = new Lenis({ lerp: .16, autoRaf: false, anchors: false });
           smoothScroll.current = lenis;
           tick = (time: number) => lenis?.raf(time * 1000);
           lenis.on('scroll', ScrollTrigger.update);
           gsap.ticker.add(tick);
           createReferenceMotion();
+          // A new drag or navigation key takes over from any wheel inertia.
+          const releaseInertia = () => lenis?.scrollTo(window.scrollY, { immediate: true });
+          const navigationKey = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement | null;
+            if (target?.closest('input,textarea,select,[contenteditable=true]')) return;
+            if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) releaseInertia();
+          };
+          window.addEventListener('pointerdown', releaseInertia, { passive: true });
+          window.addEventListener('keydown', navigationKey);
+          releaseNativeInput = () => {
+            window.removeEventListener('pointerdown', releaseInertia);
+            window.removeEventListener('keydown', navigationKey);
+          };
         } else createMobileMotion(element);
         const visibility = () => document.hidden ? lenis?.stop() : lenis?.start();
         document.addEventListener('visibilitychange', visibility);
         return () => {
           document.removeEventListener('visibilitychange', visibility);
+          releaseNativeInput?.();
           if (tick) gsap.ticker.remove(tick);
           lenis?.destroy(); lenis = undefined; smoothScroll.current = null;
           delete element.dataset.motion; delete element.dataset.layout;
@@ -94,9 +109,9 @@ export default function Showroom() {
         });
       });
     });
-    const images = Array.from(root.current!.querySelectorAll('img'));
-    images.forEach(image => image.addEventListener('load', refresh));
-    return () => { alive = false; cancelAnimationFrame(anchorFrame); history.scrollRestoration = previousRestoration; images.forEach(image => image.removeEventListener('load', refresh)); media.revert(); context.revert(); };
+    // Images live in fixed CSS frames; decoding them never changes pin geometry.
+    // Refreshing every lazy image load can tear down pins during an active drag.
+    return () => { alive = false; cancelAnimationFrame(anchorFrame); history.scrollRestoration = previousRestoration; media.revert(); context.revert(); };
   }, []);
 
   useEffect(() => {
@@ -111,8 +126,6 @@ export default function Showroom() {
     }, element);
     return () => { context.revert(); element.close(); document.body.style.overflow = previousOverflow; if (!document.hidden) smoothScroll.current?.start(); returnFocus.current?.focus({ preventScroll: true }); };
   }, [selected]);
-
-  useEffect(() => { ScrollTrigger.refresh(); }, [notes]);
 
   function navigateSection(event: React.MouseEvent<HTMLDivElement>) {
     const anchor = (event.target as HTMLElement).closest('a');
